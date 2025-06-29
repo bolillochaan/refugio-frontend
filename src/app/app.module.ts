@@ -29,50 +29,11 @@ import { AppRoutingModule } from './app-routing.module';
 // Standalone components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
-import { AnimalesListComponent } from './component/animales-list/animales-list';
+import { AnimalesListComponent } from './component/animales-list/animales-list.component';
 import { AnimalDetailComponent } from './component/animal-detail/animal-detail.component';
-import { AnimalFormComponent } from './component/animal-form/animal-form';
+import { AnimalFormComponent } from './component/animal-form/animal-form.component';
 import { EstadisticasComponent } from './component/estadisticas/estadisticas.component';
 // Si tienes NavbarComponent standalone, impórtalo aquí también
 
-@NgModule({
-  declarations: [
-    // otros componentes NO standalone aquí
-    // (NO pongas AnimalDetailComponent aquí)
-  ],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    AppRoutingModule,
-    RouterModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatPaginatorModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatTableModule,
-    MatSortModule,
-
-    // Standalone components
-    AppComponent,
-    HomeComponent,
-    AnimalesListComponent,
-    AnimalFormComponent,
-    EstadisticasComponent
-    // NavbarComponent, // si es standalone
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+// Este archivo ya no es necesario porque migraste a standalone bootstrap con bootstrapApplication.
+// Puedes eliminar este archivo o dejarlo vacío si no tienes otros NgModules.

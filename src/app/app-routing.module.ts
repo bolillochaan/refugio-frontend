@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips'; // <-- Agregado
 import { HomeComponent } from './component/home/home.component';
-import { AnimalesListComponent } from './component/animales-list/animales-list';
+import { AnimalesListComponent } from './component/animales-list/animales-list.component';
 import { AnimalDetailComponent } from './component/animal-detail/animal-detail.component';
-import { AnimalFormComponent } from './component/animal-form/animal-form';
+import { AnimalFormComponent } from './component/animal-form/animal-form.component';
 import { EstadisticasComponent } from './component/estadisticas/estadisticas.component';
 
 
