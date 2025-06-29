@@ -19,8 +19,8 @@ import { Animal } from '../../models/animal.model';
 @Component({
   selector: 'app-animales-list',
   standalone: true,
-  templateUrl: './animales-list.html',
-  styleUrls: ['./animales-list.css'],
+  templateUrl: './animales-list.component.html',
+  styleUrls: ['./animales-list.component.css'],
   imports: [
     CommonModule,
     FormsModule,

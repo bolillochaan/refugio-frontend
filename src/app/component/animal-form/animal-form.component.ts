@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-animal-form',
   templateUrl: './animal-form.component.html',
-  styleUrls: ['./animal-form.css'],
+  styleUrls: ['./animal-form.component.css'],
   standalone: true,
   imports: [
      ReactiveFormsModule,
