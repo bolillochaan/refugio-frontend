@@ -1,4 +1,5 @@
 // src/app/components/estadisticas/estadisticas.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, forkJoin, interval } from 'rxjs';
 import { takeUntil, startWith, switchMap } from 'rxjs/operators';
@@ -19,6 +20,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 
+
+
 type Tendencia = 'up' | 'down' | 'stable';
 
 interface MetricaTendencia {
@@ -29,9 +32,13 @@ interface MetricaTendencia {
 
 interface EstadisticasGenerales {
   totalAnimales: MetricaTendencia;
+  animalesDisponibles: MetricaTendencia;
+  animalesAdoptados: MetricaTendencia;
   adopcionesDelMes: MetricaTendencia;
+  adopcionesDelAno: MetricaTendencia;
   tasaAdopcion: MetricaTendencia;
   animalesCriticos: MetricaTendencia;
+  animalesEnTratamiento: MetricaTendencia;
 }
 
 interface EstadisticasPorEspecie {
@@ -70,6 +77,16 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   tipoExport: string = 'pdf';
   nombreArchivo: string = '';
 
+  // Propiedades adicionales para la tabla y métricas
+  columnasTabla: string[] = ['especie', 'tasaAdopcion', 'acciones'];
+  metricasTiempo: any = {
+    tiempoPromedioAdopcion: 0,
+    tiempoPromedioRecuperacion: 0,
+    tiempoPromedioEstadia: 0
+  };
+  topAdopciones: any[] = [];
+  alertas: any[] = [];
+
   private destroy$ = new Subject<void>();
   
   // Estados de carga
@@ -80,9 +97,13 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   // Datos principales
   estadisticasGenerales: EstadisticasGenerales = {
     totalAnimales: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    animalesDisponibles: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    animalesAdoptados: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
     adopcionesDelMes: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    adopcionesDelAno: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
     tasaAdopcion: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
-    animalesCriticos: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 }
+    animalesCriticos: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    animalesEnTratamiento: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 }
   };
   
   estadisticasPorEspecie: EstadisticasPorEspecie[] = [];
@@ -96,9 +117,13 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   // Métricas de tendencia
   metricasTendencia: EstadisticasGenerales = {
     totalAnimales: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    animalesDisponibles: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    animalesAdoptados: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
     adopcionesDelMes: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    adopcionesDelAno: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
     tasaAdopcion: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
-    animalesCriticos: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 }
+    animalesCriticos: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 },
+    animalesEnTratamiento: { valor: 0, tendencia: 'stable', porcentajeCambio: 0 }
   };
   
   // Configuración de auto-refresh
@@ -184,6 +209,16 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         tendencia: 'stable',
         porcentajeCambio: 0
       },
+      animalesDisponibles: {
+        valor: animales.filter(a => a.disponibleAdopcion).length,
+        tendencia: 'stable',
+        porcentajeCambio: 0
+      },
+      animalesAdoptados: {
+        valor: animales.filter(a => !a.disponibleAdopcion).length,
+        tendencia: 'stable',
+        porcentajeCambio: 0
+      },
       adopcionesDelMes: {
         valor: adopciones.filter(a => 
           new Date(a.fechaAdopcion) >= inicioMes
@@ -191,13 +226,25 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         tendencia: 'stable',
         porcentajeCambio: 0
       },
+      adopcionesDelAno: {
+        valor: adopciones.filter(a =>
+          new Date(a.fechaAdopcion) >= inicioAno
+        ).length,
+        tendencia: 'stable',
+        porcentajeCambio: 0
+      },
       tasaAdopcion: {
-        valor: (adopciones.length / animales.length) * 100,
+        valor: (adopciones.length / (animales.length || 1)) * 100,
         tendencia: 'stable',
         porcentajeCambio: 0
       },
       animalesCriticos: {
         valor: animales.filter(a => a.estadoSalud === 'CRITICO').length,
+        tendencia: 'stable',
+        porcentajeCambio: 0
+      },
+      animalesEnTratamiento: {
+        valor: animales.filter(a => a.estadoSalud === 'EN_TRATAMIENTO').length,
         tendencia: 'stable',
         porcentajeCambio: 0
       }
@@ -285,9 +332,13 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     
     this.metricasTendencia = {
       totalAnimales: this.calcularTendencia(this.estadisticasGenerales.totalAnimales.valor, this.estadisticasGenerales.totalAnimales.valor),
+      animalesDisponibles: this.calcularTendencia(this.estadisticasGenerales.animalesDisponibles.valor, this.estadisticasGenerales.animalesDisponibles.valor),
+      animalesAdoptados: this.calcularTendencia(this.estadisticasGenerales.animalesAdoptados.valor, this.estadisticasGenerales.animalesAdoptados.valor),
       adopcionesDelMes: this.calcularTendencia(adopcionesEsteMes, adopcionesMesAnterior),
+      adopcionesDelAno: this.calcularTendencia(this.estadisticasGenerales.adopcionesDelAno.valor, this.estadisticasGenerales.adopcionesDelAno.valor),
       tasaAdopcion: this.calcularTendencia(tasaAdopcionActual, tasaAdopcionAnterior),
-      animalesCriticos: this.calcularTendencia(this.estadisticasGenerales.animalesCriticos.valor, this.estadisticasGenerales.animalesCriticos.valor)
+      animalesCriticos: this.calcularTendencia(this.estadisticasGenerales.animalesCriticos.valor, this.estadisticasGenerales.animalesCriticos.valor),
+      animalesEnTratamiento: this.calcularTendencia(this.estadisticasGenerales.animalesEnTratamiento.valor, this.estadisticasGenerales.animalesEnTratamiento.valor)
     };
   }
   
@@ -437,6 +488,49 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   dismissAlerta(id: number) {
     // lógica para cerrar o eliminar la alerta con id dado
     console.log('Alerta cerrada:', id);
+  }
+
+  // Métodos adicionales solicitados
+  obtenerClaseTasaAdopcion(tasa: number): string {
+    if (tasa > 0.8) return 'alta';
+    if (tasa > 0.5) return 'media';
+    return 'baja';
+  }
+
+  obtenerIconoTasaAdopcion(tasa: number): string {
+    if (tasa > 0.8) return 'thumb_up';
+    if (tasa > 0.5) return 'thumbs_up_down';
+    return 'thumb_down';
+  }
+
+  verDetallesEspecie(especie: string): void {
+    // lógica para mostrar detalles de la especie
+    console.log('Detalles de especie:', especie);
+  }
+
+  generarReporteEspecie(especie: string): void {
+    // lógica para generar reporte
+    console.log('Generar reporte para especie:', especie);
+  }
+
+  formatearFecha(fecha: Date): string {
+    // lógica para formatear fecha
+    return fecha.toLocaleDateString();
+  }
+
+  obtenerIconoAlerta(tipo: string): string {
+    // lógica para icono según tipo de alerta
+    switch (tipo) {
+      case 'info': return 'info';
+      case 'warning': return 'warning';
+      case 'error': return 'error';
+      default: return 'notification_important';
+    }
+  }
+
+  formatearFechaHora(fecha: Date): string {
+    // lógica para formatear fecha y hora
+    return fecha.toLocaleString();
   }
 
   // Define aquí las demás propiedades y métodos que uses en el template

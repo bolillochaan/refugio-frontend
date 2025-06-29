@@ -15,7 +15,7 @@
       <mat-form-field appearance="outline" class="date-field">
         <mat-label>Desde</mat-label>
         <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+       <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
         <mat-datepicker #pickerInicio></mat-datepicker>
       </mat-form-field>
       
@@ -76,7 +76,7 @@
           <div class="metrica-info">
             <span class="metrica-label">Total de Animales</span>
             <div class="metrica-valor">
-              {{ formatearNumero(estadisticasGenerales.totalAnimales) }}
+              {{ formatearNumero(estadisticasGenerales.totalAnimales.valor) }}
               <div class="tendencia" [class]="obtenerColorTendencia(metricasTendencia.totalAnimales.tendencia)">
                 <mat-icon>{{ obtenerIconoTendencia(metricasTendencia.totalAnimales.tendencia) }}</mat-icon>
                 <span>{{ formatearPorcentaje(metricasTendencia.totalAnimales.porcentajeCambio) }}</span>

@@ -221,7 +221,12 @@ export class AnimalFormComponent implements OnInit {
       panelClass: ['error-snackbar']
     });
   }
-
+ocultarImagen(event: Event): void {
+  const img = event.target as HTMLImageElement | null;
+  if (img) {
+    img.style.display = 'none';
+  }
+}
   // Método para manejar la subida de imágenes (opcional)
   onFileSelected(event: any): void {
     const file = event.target.files[0];

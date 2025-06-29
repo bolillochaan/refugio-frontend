@@ -185,9 +185,9 @@
             </div>
 
             <div class="photo-preview" *ngIf="animalForm.get('fotoUrl')?.value">
-             <img [src]="animalForm.get('fotoUrl')?.value" 
+            <img [src]="animalForm.get('fotoUrl')?.value" 
      alt="Vista previa"
-     (error)="($event.target as HTMLImageElement).style.display='none'">
+     (error)="ocultarImagen($event)">
             </div>
           </div>
         </div>
