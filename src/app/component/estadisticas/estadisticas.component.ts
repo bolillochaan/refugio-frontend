@@ -6,6 +6,12 @@ import { Animal, AnimalResponse } from '../../models/animal.model';
 import { Adopcion } from '../../models/adopcion.model';
 import { AnimalService } from '../../services/animal.service';
 import { AdopcionService } from '../../services/adopcion.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 type Tendencia = 'up' | 'down' | 'stable';
 
@@ -38,9 +44,17 @@ interface EstadisticasPorMes {
 
 @Component({
   selector: 'app-estadisticas',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './estadisticas.component.html',
-  styleUrls: ['./estadisticas.component.css'],
-  // standalone: true // solo si lo usas como standalone
+  styleUrls: ['./estadisticas.component.css']
 })
 export class EstadisticasComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -81,6 +95,11 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   // Filtros de fecha
   fechaInicio: Date = new Date(new Date().getFullYear(), 0, 1); // Inicio del año
   fechaFin: Date = new Date(); // Hoy
+  
+  // Nuevas propiedades para gráficos y detalles
+  incluirGraficos = true;
+  incluirDetalles = false;
+  exportando = false;
   
   constructor(
     private animalService: AnimalService,
@@ -392,5 +411,11 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         console.error('Error al obtener animales', err);
       }
     });
+  }
+
+  confirmarExport() {
+    this.exportando = true;
+    // lógica para exportar
+    setTimeout(() => this.exportando = false, 2000);
   }
 }

@@ -3,9 +3,26 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimalService } from '../../services/animal.service';
 import { Animal } from '../../models/animal.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatIconModule,
+    MatCardModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatChipsModule
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -70,5 +87,18 @@ export class HomeComponent implements OnInit {
 
   agregarAnimal(): void {
     this.router.navigate(['/animales/crear']);
+  }
+
+  getEstadoColor(estado: string): string {
+    switch (estado.toLowerCase()) {
+      case 'saludable':
+        return 'primary';
+      case 'en tratamiento':
+        return 'warn';
+      case 'recuperado':
+        return 'accent';
+      default:
+        return '';
+    }
   }
 }
