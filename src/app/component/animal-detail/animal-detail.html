@@ -82,7 +82,7 @@
               <mat-icon>calendar_today</mat-icon>
               <div>
                 <label>Fecha de Ingreso:</label>
-                <span>{{ formatearFecha(animal?.fechaIngreso) }}</span>
+                <span *ngIf="animal?.fechaIngreso">{{ formatearFecha(animal.fechaIngreso) }}</span>
               </div>
             </div>
           </div>
@@ -101,8 +101,8 @@
           <div class="status-content">
             <div class="status-item">
               <label>Estado de Salud:</label>
-              <mat-chip [color]="getEstadoColor(animal?.estadoSalud)" selected>
-                {{ animal?.estadoSalud.replace('_', ' ') }}
+              <mat-chip *ngIf="animal?.estadoSalud" [color]="getEstadoColor(animal.estadoSalud)" selected>
+                {{ animal?.estadoSalud ? animal.estadoSalud.replace('_', ' ') : '' }}
               </mat-chip>
             </div>
 
