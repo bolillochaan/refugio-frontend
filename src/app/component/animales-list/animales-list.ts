@@ -8,8 +8,8 @@ import { Animal } from '../../models/animal.model';
 
 @Component({
   selector: 'app-animales-list',
-  templateUrl: './animales-list.component.html',
-  styleUrls: ['./animales-list.component.css'],
+  templateUrl: './animales-list.html',
+  styleUrls: ['./animales-list.css'],
   standalone: true // solo si lo usas como standalone
 })
 export class AnimalesListComponent implements OnInit {

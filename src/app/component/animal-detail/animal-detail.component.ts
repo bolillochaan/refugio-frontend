@@ -10,8 +10,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-animal-detail',
-  templateUrl: './animal-detail.component.html',
-  styleUrls: ['./animal-detail.component.css'],
+  templateUrl: './animal-detail.html',
+  styleUrls: ['./animal-detail.css'],
   standalone: true // <-- Agrega esto si es standalone
 })
 export class AnimalDetailComponent implements OnInit {

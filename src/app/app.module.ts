@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 // Angular Material Modules
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -22,21 +23,23 @@ import { MatSortModule } from '@angular/material/sort';
 
 import { AppRoutingModule } from './app-routing.module';
 
-// Importa los componentes standalone
+// Standalone components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
 import { AnimalesListComponent } from './component/animales-list/animales-list';
 import { AnimalDetailComponent } from './component/animal-detail/animal-detail.component';
 import { AnimalFormComponent } from './component/animal-form/animal-form';
 import { EstadisticasComponent } from './component/estadisticas/estadisticas.component';
+// Si tienes NavbarComponent standalone, impórtalo aquí también
 
 @NgModule({
   declarations: [
-    // Solo los componentes NO standalone aquí
+    // Solo componentes NO standalone aquí
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
@@ -44,6 +47,7 @@ import { EstadisticasComponent } from './component/estadisticas/estadisticas.com
 
     // Angular Material
     MatToolbarModule,
+    MatIconModule,
     MatButtonModule,
     MatCardModule,
     MatInputModule,
@@ -53,17 +57,17 @@ import { EstadisticasComponent } from './component/estadisticas/estadisticas.com
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatIconModule,
     MatTableModule,
     MatSortModule,
 
-    // Standalone components van aquí
+    // Standalone components
     AppComponent,
     HomeComponent,
     AnimalesListComponent,
     AnimalDetailComponent,
     AnimalFormComponent,
     EstadisticasComponent
+    // NavbarComponent, // si es standalone
   ],
   providers: [],
   bootstrap: [AppComponent]
