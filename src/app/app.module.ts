@@ -37,7 +37,8 @@ import { EstadisticasComponent } from './component/estadisticas/estadisticas.com
 
 @NgModule({
   declarations: [
-    // Solo componentes NO standalone aquí
+    AnimalDetailComponent,
+    // otros componentes NO standalone aquí
   ],
   imports: [
     BrowserModule,
@@ -50,9 +51,9 @@ import { EstadisticasComponent } from './component/estadisticas/estadisticas.com
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule,
+    MatIconModule,      // <-- agregado aquí
+    MatCardModule,      // <-- agregado aquí
     MatProgressSpinnerModule,
-    MatCardModule,
     MatToolbarModule,
     MatButtonModule,
     MatSelectModule,
@@ -67,7 +68,6 @@ import { EstadisticasComponent } from './component/estadisticas/estadisticas.com
     AppComponent,
     HomeComponent,
     AnimalesListComponent,
-    AnimalDetailComponent,
     AnimalFormComponent,
     EstadisticasComponent
     // NavbarComponent, // si es standalone

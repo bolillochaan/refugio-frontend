@@ -1,5 +1,6 @@
 // components/animales-list/animales-list.component.ts
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
@@ -19,6 +20,7 @@ export class AnimalesListComponent implements OnInit {
   totalElements = 0;
   pageSize = 12;
   currentPage = 0;
+  pageIndex = 0;
 
   constructor(
     private animalService: AnimalService,
@@ -67,12 +69,11 @@ export class AnimalesListComponent implements OnInit {
     }
   }
 
-  onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.cargarAnimales();
-  }
 
+  onPageChange(event: PageEvent) {
+  this.pageIndex = event.pageIndex;
+  this.pageSize = event.pageSize;
+}
   verDetalles(id: number): void {
     this.router.navigate(['/animales', id]);
   }
