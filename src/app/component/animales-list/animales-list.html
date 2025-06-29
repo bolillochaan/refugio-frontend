@@ -1,0 +1,72 @@
+<!-- components/animales-list/animales-list.component.html -->
+<div class="container">
+  <div class="header">
+    <h1>Animales en el Refugio</h1>
+    
+    <div class="search-section" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
+      <mat-form-field fxFlex="1">
+        <mat-label>Buscar animales...</mat-label>
+        <input matInput [(ngModel)]="searchTerm" (keyup.enter)="buscarAnimales()">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      
+      <button mat-outlined-button (click)="buscarAnimales()">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+      
+      <button mat-raised-button color="primary" (click)="crearAnimal()">
+        <mat-icon>add</mat-icon>
+        Agregar Animal
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="animals-grid" fxLayout="row wrap" fxLayoutGap="24px grid">
+    <div fxFlex="33" fxFlex.sm="50" fxFlex.xs="100" *ngFor="let animal of animales">
+      <mat-card class="animal-card">
+        <img mat-card-image [src]="animal.fotoUrl || '/assets/placeholder-animal.jpg'" [alt]="animal.nombre">
+        
+        <mat-card-header>
+          <mat-card-title>{{ animal.nombre }}</mat-card-title>
+          <mat-card-subtitle>{{ animal.especie }} • {{ animal.raza }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p><strong>Edad:</strong> {{ animal.edadAproximada }} años</p>
+          
+          <div class="chips">
+            <mat-chip [color]="getEstadoColor(animal.estadoSalud)" selected>
+              {{ animal.estadoSalud.replace('_', ' ') }}
+            </mat-chip>
+            <mat-chip *ngIf="animal.disponibleAdopcion" color="primary" selected>
+              Disponible para adopción
+            </mat-chip>
+          </div>
+
+          <p *ngIf="animal.descripcion" class="description">
+            {{ animal.descripcion.length > 100 ? (animal.descripcion | slice:0:100) + '...' : animal.descripcion }}
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-button (click)="verDetalles(animal.animalId!)">Ver Detalles</button>
+          <button mat-button (click)="editarAnimal(animal.animalId!)">Editar</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <mat-paginator
+    *ngIf="!loading"
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[6, 12, 24, 48]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>

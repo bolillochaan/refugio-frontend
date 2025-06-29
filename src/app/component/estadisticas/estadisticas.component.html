@@ -1,0 +1,521 @@
+<!-- src/app/components/estadisticas/estadisticas.component.html -->
+<div class="estadisticas-container">
+  
+  <!-- Header con controles -->
+  <div class="estadisticas-header">
+    <div class="header-info">
+      <h1>
+        <mat-icon>analytics</mat-icon>
+        Dashboard de Estadísticas
+      </h1>
+      <p class="subtitle">Resumen completo de la actividad del refugio</p>
+    </div>
+    
+    <div class="header-controls">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Desde</mat-label>
+        <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
+        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+        <mat-datepicker #pickerInicio></mat-datepicker>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>Hasta</mat-label>
+        <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+      </mat-form-field>
+      
+      <button mat-icon-button 
+              (click)="refreshData()" 
+              matTooltip="Actualizar datos"
+              class="refresh-button">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      
+      <button mat-stroked-button 
+              (click)="exportarEstadisticas()"
+              class="export-button">
+        <mat-icon>download</mat-icon>
+        Exportar
+      </button>
+      
+      <mat-slide-toggle [(ngModel)]="autoRefresh" 
+                        (change)="toggleAutoRefresh()"
+                        class="auto-refresh-toggle">
+        Auto-refresh
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>Cargando estadísticas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error && !loading">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h3>Error al cargar estadísticas</h3>
+    <p>{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" (click)="refreshData()">
+      <mat-icon>refresh</mat-icon>
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="estadisticas-content" *ngIf="!loading && !error">
+    
+    <!-- Métricas Principales -->
+    <div class="metricas-principales">
+      <div class="metrica-card">
+        <div class="metrica-header">
+          <mat-icon class="metrica-icon animals">pets</mat-icon>
+          <div class="metrica-info">
+            <span class="metrica-label">Total de Animales</span>
+            <div class="metrica-valor">
+              {{ formatearNumero(estadisticasGenerales.totalAnimales) }}
+              <div class="tendencia" [class]="obtenerColorTendencia(metricasTendencia.totalAnimales.tendencia)">
+                <mat-icon>{{ obtenerIconoTendencia(metricasTendencia.totalAnimales.tendencia) }}</mat-icon>
+                <span>{{ formatearPorcentaje(metricasTendencia.totalAnimales.porcentajeCambio) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="metrica-detalles">
+          <div class="detalle-item">
+            <span class="detalle-label">Disponibles:</span>
+            <span class="detalle-valor disponibles">{{ formatearNumero(estadisticasGenerales.animalesDisponibles) }}</span>
+          </div>
+          <div class="detalle-item">
+            <span class="detalle-label">Adoptados:</span>
+            <span class="detalle-valor adoptados">{{ formatearNumero(estadisticasGenerales.animalesAdoptados) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrica-card">
+        <div class="metrica-header">
+          <mat-icon class="metrica-icon adopciones">favorite</mat-icon>
+          <div class="metrica-info">
+            <span class="metrica-label">Adopciones del Mes</span>
+            <div class="metrica-valor">
+              {{ formatearNumero(estadisticasGenerales.adopcionesEsteMes) }}
+              <div class="tendencia" [class]="obtenerColorTendencia(metricasTendencia.adopcionesDelMes.tendencia)">
+                <mat-icon>{{ obtenerIconoTendencia(metricasTendencia.adopcionesDelMes.tendencia) }}</mat-icon>
+                <span>{{ formatearPorcentaje(metricasTendencia.adopcionesDelMes.porcentajeCambio) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="metrica-detalles">
+          <div class="detalle-item">
+            <span class="detalle-label">Este año:</span>
+            <span class="detalle-valor">{{ formatearNumero(estadisticasGenerales.adopcionesEsteAno) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrica-card">
+        <div class="metrica-header">
+          <mat-icon class="metrica-icon salud">medical_services</mat-icon>
+          <div class="metrica-info">
+            <span class="metrica-label">Estado de Salud</span>
+            <div class="metrica-valor small">
+              <div class="salud-grid">
+                <div class="salud-item tratamiento">
+                  <span class="salud-numero">{{ formatearNumero(estadisticasGenerales.animalesEnTratamiento) }}</span>
+                  <span class="salud-label">En Tratamiento</span>
+                </div>
+                <div class="salud-item critico">
+                  <span class="salud-numero">{{ formatearNumero(estadisticasGenerales.animalesCriticos) }}</span>
+                  <span class="salud-label">Críticos</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrica-card">
+        <div class="metrica-header">
+          <mat-icon class="metrica-icon tasa">trending_up</mat-icon>
+          <div class="metrica-info">
+            <span class="metrica-label">Tasa de Adopción</span>
+            <div class="metrica-valor">
+              {{ formatearPorcentaje(metricasTendencia.tasaAdopcion.valor) }}
+              <div class="tendencia" [class]="obtenerColorTendencia(metricasTendencia.tasaAdopcion.tendencia)">
+                <mat-icon>{{ obtenerIconoTendencia(metricasTendencia.tasaAdopcion.tendencia) }}</mat-icon>
+                <span>{{ formatearPorcentaje(metricasTendencia.tasaAdopcion.porcentajeCambio) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos y Tablas -->
+    <div class="graficos-container">
+      
+      <!-- Distribución por Especies -->
+      <div class="grafico-card">
+        <div class="card-header">
+          <h3>
+            <mat-icon>category</mat-icon>
+            Distribución por Especies
+          </h3>
+        </div>
+        <div class="card-content">
+          <div class="especies-grid">
+            <div class="especie-item" *ngFor="let especie of estadisticasPorEspecie">
+              <div class="especie-info">
+                <div class="especie-nombre">{{ especie.especie }}</div>
+                <div class="especie-stats">
+                  <span class="stat-total">{{ especie.total }} total</span>
+                  <span class="stat-disponibles">{{ especie.disponibles }} disponibles</span>
+                </div>
+              </div>
+              <div class="especie-chart">
+                <div class="progress-ring">
+                  <svg width="60" height="60">
+                    <circle cx="30" cy="30" r="25" 
+                            stroke="#e0e0e0" 
+                            stroke-width="4" 
+                            fill="transparent"></circle>
+                    <circle cx="30" cy="30" r="25" 
+                            stroke="#3498db" 
+                            stroke-width="4" 
+                            fill="transparent"
+                            [style.stroke-dasharray]="157"
+                            [style.stroke-dashoffset]="157 - (157 * especie.porcentaje / 100)"
+                            transform="rotate(-90 30 30)"></circle>
+                  </svg>
+                  <div class="progress-text">{{ formatearPorcentaje(especie.porcentaje) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adopciones por Mes -->
+      <div class="grafico-card">
+        <div class="card-header">
+          <h3>
+            <mat-icon>timeline</mat-icon>
+            Adopciones por Mes
+          </h3>
+        </div>
+        <div class="card-content">
+          <div class="adopciones-chart">
+            <div class="chart-bars">
+              <div class="bar-item" *ngFor="let mes of estadisticasPorMes">
+                <div class="bar-container">
+                  <div class="bar" 
+                       [style.height.%]="mes.adopciones > 0 ? (mes.adopciones / getMaxAdopciones()) * 100 : 0">
+                  </div>
+                </div>
+                <div class="bar-label">{{ mes.mes.split(' ')[0].substring(0, 3) }}</div>
+                <div class="bar-value">{{ mes.adopciones }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado de Salud -->
+      <div class="grafico-card">
+        <div class="card-header">
+          <h3>
+            <mat-icon>health_and_safety</mat-icon>
+            Estado de Salud General
+          </h3>
+        </div>
+        <div class="card-content">
+          <div class="salud-chart">
+            <div class="salud-donut">
+              <svg width="200" height="200" viewBox="0 0 200 200">
+                <!-- Círculos para donut chart -->
+                <circle cx="100" cy="100" r="70" 
+                        stroke="#27ae60" 
+                        stroke-width="20" 
+                        fill="transparent"
+                        [style.stroke-dasharray]="getCircunferencia()"
+                        [style.stroke-dashoffset]="getOffset(0)"
+                        transform="rotate(-90 100 100)"></circle>
+                <circle cx="100" cy="100" r="70" 
+                        stroke="#f39c12" 
+                        stroke-width="20" 
+                        fill="transparent"
+                        [style.stroke-dasharray]="getCircunferencia()"
+                        [style.stroke-dashoffset]="getOffset(1)"
+                        transform="rotate(-90 100 100)"></circle>
+                <circle cx="100" cy="100" r="70" 
+                        stroke="#e74c3c" 
+                        stroke-width="20" 
+                        fill="transparent"
+                        [style.stroke-dasharray]="getCircunferencia()"
+                        [style.stroke-dashoffset]="getOffset(2)"
+                        transform="rotate(-90 100 100)"></circle>
+              </svg>
+              <div class="donut-center">
+                <div class="center-number">{{ estadisticasGenerales.totalAnimales }}</div>
+                <div class="center-label">Total</div>
+              </div>
+            </div>
+            <div class="salud-legend">
+              <div class="legend-item">
+                <div class="legend-color saludable"></div>
+                <span>Saludables ({{ chartDataSalud[0]?.value || 0 }})</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color tratamiento"></div>
+                <span>En Tratamiento ({{ chartDataSalud[1]?.value || 0 }})</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color critico"></div>
+                <span>Críticos ({{ chartDataSalud[2]?.value || 0 }})</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabla de Resumen -->
+    <div class="tabla-resumen">
+      <div class="card-header">
+        <h3>
+          <mat-icon>table_chart</mat-icon>
+          Resumen Detallado por Especie
+        </h3>
+      </div>
+      <div class="table-container">
+        <table mat-table [dataSource]="estadisticasPorEspecie" class="resumen-table">
+          
+          <ng-container matColumnDef="especie">
+            <th mat-header-cell *matHeaderCellDef>Especie</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="especie-cell">
+                <mat-icon class="especie-icon">pets</mat-icon>
+                {{ row.especie }}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let row">
+    <div class="numero-badge">
+                {{ formatearNumero(row.total) }}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="disponibles">
+            <th mat-header-cell *matHeaderCellDef>Disponibles</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="numero-badge disponibles">
+                {{ formatearNumero(row.disponibles) }}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="adoptados">
+            <th mat-header-cell *matHeaderCellDef>Adoptados</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="numero-badge adoptados">
+                {{ formatearNumero(row.adoptados) }}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="enTratamiento">
+            <th mat-header-cell *matHeaderCellDef>En Tratamiento</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="numero-badge tratamiento">
+                {{ formatearNumero(row.enTratamiento) }}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="criticos">
+            <th mat-header-cell *matHeaderCellDef>Críticos</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="numero-badge critico">
+                {{ formatearNumero(row.criticos) }}
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tasaAdopcion">
+            <th mat-header-cell *matHeaderCellDef>Tasa Adopción</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="tasa-badge" [class]="obtenerClaseTasaAdopcion(row.tasaAdopcion)">
+                {{ formatearPorcentaje(row.tasaAdopcion) }}
+                <mat-icon class="tasa-icon">{{ obtenerIconoTasaAdopcion(row.tasaAdopcion) }}</mat-icon>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="acciones-cell">
+                <button mat-icon-button 
+                        (click)="verDetallesEspecie(row.especie)"
+                        matTooltip="Ver detalles"
+                        class="accion-button">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button 
+                        (click)="generarReporteEspecie(row.especie)"
+                        matTooltip="Generar reporte"
+                        class="accion-button">
+                  <mat-icon>description</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Estadísticas Adicionales -->
+    <div class="estadisticas-adicionales">
+      
+      <!-- Métricas de Tiempo -->
+      <div class="metrica-tiempo-card">
+        <div class="card-header">
+          <h3>
+            <mat-icon>schedule</mat-icon>
+            Métricas de Tiempo
+          </h3>
+        </div>
+        <div class="card-content">
+          <div class="tiempo-grid">
+            <div class="tiempo-item">
+              <div class="tiempo-valor">{{ formatearNumero(metricasTiempo.tiempoPromedioAdopcion) }}</div>
+              <div class="tiempo-unidad">días</div>
+              <div class="tiempo-label">Tiempo promedio adopción</div>
+            </div>
+            <div class="tiempo-item">
+              <div class="tiempo-valor">{{ formatearNumero(metricasTiempo.tiempoPromedioRecuperacion) }}</div>
+              <div class="tiempo-unidad">días</div>
+              <div class="tiempo-label">Tiempo promedio recuperación</div>
+            </div>
+            <div class="tiempo-item">
+              <div class="tiempo-valor">{{ formatearNumero(metricasTiempo.tiempoPromedioEstadia) }}</div>
+              <div class="tiempo-unidad">días</div>
+              <div class="tiempo-label">Tiempo promedio estadía</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Adopciones -->
+      <div class="top-adopciones-card">
+        <div class="card-header">
+          <h3>
+            <mat-icon>stars</mat-icon>
+            Adopciones Destacadas
+          </h3>
+        </div>
+        <div class="card-content">
+          <div class="adopciones-lista">
+            <div class="adopcion-item" *ngFor="let adopcion of topAdopciones">
+              <div class="adopcion-animal">
+                <div class="animal-avatar" [style.background-image]="'url(' + (adopcion.foto || '/assets/images/default-pet.jpg') + ')'">
+                </div>
+                <div class="animal-info">
+                  <div class="animal-nombre">{{ adopcion.nombreAnimal }}</div>
+                  <div class="animal-especie">{{ adopcion.especie }}</div>
+                </div>
+              </div>
+              <div class="adopcion-detalles">
+                <div class="adopcion-fecha">{{ formatearFecha(adopcion.fechaAdopcion) }}</div>
+                <div class="adopcion-adoptante">{{ adopcion.nombreAdoptante }}</div>
+              </div>
+              <div class="adopcion-tiempo">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ adopcion.tiempoEnRefugio }} días en refugio</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alertas y Notificaciones -->
+    <div class="alertas-container" *ngIf="alertas && alertas.length > 0">
+      <div class="card-header">
+        <h3>
+          <mat-icon>notification_important</mat-icon>
+          Alertas y Notificaciones
+        </h3>
+      </div>
+      <div class="alertas-lista">
+        <div class="alerta-item" 
+             *ngFor="let alerta of alertas" 
+             [class]="'alerta-' + alerta.tipo">
+          <div class="alerta-icon">
+            <mat-icon>{{ obtenerIconoAlerta(alerta.tipo) }}</mat-icon>
+          </div>
+          <div class="alerta-contenido">
+            <div class="alerta-titulo">{{ alerta.titulo }}</div>
+            <div class="alerta-mensaje">{{ alerta.mensaje }}</div>
+            <div class="alerta-fecha">{{ formatearFechaHora(alerta.fecha) }}</div>
+          </div>
+          <button mat-icon-button 
+                  (click)="dismissAlerta(alerta.id)"
+                  class="alerta-dismiss">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Dialogs y Modals -->
+<ng-template #exportDialog>
+  <div class="export-dialog">
+    <h2 mat-dialog-title>Exportar Estadísticas</h2>
+    <mat-dialog-content>
+      <div class="export-options">
+        <mat-radio-group [(ngModel)]="tipoExport">
+          <mat-radio-button value="pdf">PDF Completo</mat-radio-button>
+          <mat-radio-button value="excel">Excel con datos</mat-radio-button>
+          <mat-radio-button value="csv">CSV solo datos</mat-radio-button>
+        </mat-radio-group>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del archivo</mat-label>
+          <input matInput [(ngModel)]="nombreArchivo" placeholder="estadisticas-refugio">
+        </mat-form-field>
+        
+        <mat-checkbox [(ngModel)]="incluirGraficos">Incluir gráficos</mat-checkbox>
+        <mat-checkbox [(ngModel)]="incluirDetalles">Incluir detalles por especie</mat-checkbox>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancelar</button>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="confirmarExport()"
+              [disabled]="exportando">
+        <mat-icon *ngIf="exportando">hourglass_empty</mat-icon>
+        <mat-icon *ngIf="!exportando">download</mat-icon>
+        {{ exportando ? 'Exportando...' : 'Exportar' }}
+      </button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

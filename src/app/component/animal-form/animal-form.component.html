@@ -1,0 +1,233 @@
+<!-- src/app/components/animal-form/animal-form.component.html -->
+<div class="form-container">
+  <div class="form-header">
+    <h2>{{ isEditMode ? 'Editar Animal' : 'Registrar Nuevo Animal' }}</h2>
+    <button mat-icon-button class="close-button" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="form-content" *ngIf="!loading">
+    <form [formGroup]="animalForm" (ngSubmit)="onSubmit()" novalidate>
+      
+      <!-- Información Básica -->
+      <div class="section">
+        <h3 class="section-title">Información Básica</h3>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Nombre del Animal</mat-label>
+            <input matInput 
+                   formControlName="nombre" 
+                   placeholder="Ej: Max, Luna, Charlie">
+            <mat-icon matSuffix>pets</mat-icon>
+            <mat-error *ngIf="isFieldInvalid('nombre')">
+              {{ getFieldError('nombre') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Especie</mat-label>
+            <mat-select formControlName="especie">
+              <mat-option *ngFor="let especie of especies" [value]="especie">
+                {{ especie }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="isFieldInvalid('especie')">
+              {{ getFieldError('especie') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Raza</mat-label>
+            <input matInput 
+                   formControlName="raza" 
+                   placeholder="Ej: Labrador, Siamés, Mestizo">
+            <mat-error *ngIf="isFieldInvalid('raza')">
+              {{ getFieldError('raza') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Color</mat-label>
+            <input matInput 
+                   formControlName="color" 
+                   placeholder="Ej: Marrón, Negro, Blanco">
+            <mat-icon matSuffix>palette</mat-icon>
+            <mat-error *ngIf="isFieldInvalid('color')">
+              {{ getFieldError('color') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Edad Aproximada (años)</mat-label>
+            <input matInput 
+                   type="number" 
+                   formControlName="edadAproximada" 
+                   min="0" 
+                   max="30">
+            <mat-icon matSuffix>schedule</mat-icon>
+            <mat-error *ngIf="isFieldInvalid('edadAproximada')">
+              {{ getFieldError('edadAproximada') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Peso (kg)</mat-label>
+            <input matInput 
+                   type="number" 
+                   formControlName="peso" 
+                   min="0.1" 
+                   max="200" 
+                   step="0.1">
+            <mat-icon matSuffix>monitor_weight</mat-icon>
+            <mat-error *ngIf="isFieldInvalid('peso')">
+              {{ getFieldError('peso') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Sexo</mat-label>
+            <mat-select formControlName="sexo">
+              <mat-option *ngFor="let sexo of sexos" [value]="sexo.value">
+                {{ sexo.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="isFieldInvalid('sexo')">
+              {{ getFieldError('sexo') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Estado de Salud -->
+      <div class="section">
+        <h3 class="section-title">Estado de Salud</h3>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Estado de Salud</mat-label>
+            <mat-select formControlName="estadoSalud">
+              <mat-option *ngFor="let estado of estadosSalud" [value]="estado.value">
+                <div class="estado-option">
+                  <mat-icon [class]="'estado-icon estado-' + estado.value.toLowerCase()">
+                    {{ estado.value === 'SALUDABLE' ? 'favorite' : 
+                       estado.value === 'EN_TRATAMIENTO' ? 'medical_services' : 'warning' }}
+                  </mat-icon>
+                  {{ estado.label }}
+                </div>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="isFieldInvalid('estadoSalud')">
+              {{ getFieldError('estadoSalud') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Historial Médico</mat-label>
+            <textarea matInput 
+                      formControlName="historialMedico" 
+                      rows="3"
+                      placeholder="Vacunas, tratamientos, cirugías, alergias...">
+            </textarea>
+            <mat-icon matSuffix>medical_information</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Descripción y Foto -->
+      <div class="section">
+        <h3 class="section-title">Información Adicional</h3>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput 
+                      formControlName="descripcion" 
+                      rows="4"
+                      placeholder="Personalidad, comportamiento, características especiales...">
+            </textarea>
+            <mat-icon matSuffix>description</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <div class="photo-section">
+            <div class="photo-upload">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>URL de la Foto</mat-label>
+                <input matInput 
+                       formControlName="fotoUrl" 
+                       placeholder="https://ejemplo.com/foto.jpg">
+                <mat-icon matSuffix>image</mat-icon>
+              </mat-form-field>
+              
+              <div class="file-upload">
+                <input type="file" 
+                       #fileInput 
+                       accept="image/*" 
+                       (change)="onFileSelected($event)"
+                       style="display: none;">
+                <button type="button" 
+                        mat-stroked-button 
+                        (click)="fileInput.click()"
+                        class="upload-button">
+                  <mat-icon>cloud_upload</mat-icon>
+                  Subir Imagen
+                </button>
+              </div>
+            </div>
+
+            <div class="photo-preview" *ngIf="animalForm.get('fotoUrl')?.value">
+              <img [src]="animalForm.get('fotoUrl')?.value" 
+                   alt="Vista previa"
+                   (error)="$event.target.style.display='none'">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <mat-checkbox formControlName="disponibleAdopcion" 
+                        class="adoption-checkbox">
+            <span class="checkbox-label">
+              <mat-icon>favorite</mat-icon>
+              Disponible para adopción
+            </span>
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="form-actions">
+        <button type="button" 
+                mat-stroked-button 
+                (click)="onCancel()"
+                class="cancel-button">
+          <mat-icon>cancel</mat-icon>
+          Cancelar
+        </button>
+        
+        <button type="submit" 
+                mat-raised-button 
+                color="primary"
+                [disabled]="animalForm.invalid || loading"
+                class="submit-button">
+          <mat-icon>{{ isEditMode ? 'edit' : 'save' }}</mat-icon>
+          {{ isEditMode ? 'Actualizar Animal' : 'Registrar Animal' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>{{ isEditMode ? 'Cargando información...' : 'Guardando...' }}</p>
+  </div>
+</div>

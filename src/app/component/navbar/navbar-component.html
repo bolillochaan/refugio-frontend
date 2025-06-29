@@ -1,0 +1,94 @@
+<mat-toolbar color="primary" class="navbar">
+  <!-- Logo y título -->
+  <div class="navbar-brand" (click)="navigateTo('/')">
+    <mat-icon class="brand-icon">pets</mat-icon>
+    <span class="brand-text">Refugio de Animales</span>
+  </div>
+
+  <!-- Spacer para empujar el menú a la derecha -->
+  <div class="spacer"></div>
+
+  <!-- Menú desktop -->
+  <nav class="desktop-menu">
+    <button 
+      mat-button 
+      class="nav-button" 
+      [class.active]="isActiveRoute('/')"
+      (click)="navigateTo('/')">
+      <mat-icon>home</mat-icon>
+      <span>Inicio</span>
+    </button>
+    
+    <button 
+      mat-button 
+      class="nav-button" 
+      [class.active]="isActiveRoute('/animales')"
+      (click)="navigateTo('/animales')">
+      <mat-icon>pets</mat-icon>
+      <span>Animales</span>
+    </button>
+    
+    <button 
+      mat-button 
+      class="nav-button" 
+      [class.active]="isActiveRoute('/estadisticas')"
+      (click)="navigateTo('/estadisticas')">
+      <mat-icon>assessment</mat-icon>
+      <span>Estadísticas</span>
+    </button>
+
+    <button 
+      mat-raised-button 
+      color="accent" 
+      class="cta-button"
+      (click)="navigateTo('/animales/nuevo')">
+      <mat-icon>add</mat-icon>
+      <span>Agregar Animal</span>
+    </button>
+  </nav>
+
+  <!-- Menú móvil -->
+  <button 
+    mat-icon-button 
+    class="mobile-menu-button" 
+    [matMenuTriggerFor]="mobileMenu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- Menú desplegable móvil -->
+  <mat-menu #mobileMenu="matMenu" class="mobile-menu">
+    <button 
+      mat-menu-item 
+      [class.active]="isActiveRoute('/')"
+      (click)="navigateTo('/')">
+      <mat-icon>home</mat-icon>
+      <span>Inicio</span>
+    </button>
+    
+    <button 
+      mat-menu-item 
+      [class.active]="isActiveRoute('/animales')"
+      (click)="navigateTo('/animales')">
+      <mat-icon>pets</mat-icon>
+      <span>Animales</span>
+    </button>
+    
+    <button 
+      mat-menu-item 
+      [class.active]="isActiveRoute('/estadisticas')"
+      (click)="navigateTo('/estadisticas')">
+      <mat-icon>assessment</mat-icon>
+      <span>Estadísticas</span>
+    </button>
+
+    <mat-divider></mat-divider>
+    
+    <button 
+      mat-menu-item 
+      class="mobile-cta"
+      (click)="navigateTo('/animales/nuevo')">
+      <mat-icon>add</mat-icon>
+      <span>Agregar Animal</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

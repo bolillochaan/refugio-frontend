@@ -1,0 +1,262 @@
+/* Navbar principal */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 64px;
+  padding: 0 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+}
+
+/* Brand/Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.brand-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  color: #fff;
+}
+
+.brand-text {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+/* Spacer */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Menú desktop */
+.desktop-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.3s ease;
+}
+
+.nav-button:hover::before {
+  left: 0;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.nav-button.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.nav-button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Botón CTA */
+.cta-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border-radius: 24px;
+  font-weight: 600;
+  margin-left: 16px;
+  background: #ff4081;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 64, 129, 0.3);
+}
+
+.cta-button:hover {
+  background: #e91e63;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 64, 129, 0.4);
+}
+
+.cta-button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Menú móvil */
+.mobile-menu-button {
+  display: none;
+  color: #fff;
+}
+
+.mobile-menu .mat-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu .mat-menu-item:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+}
+
+.mobile-menu .mat-menu-item.active {
+  background-color: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.mobile-menu .mat-menu-item mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.mobile-cta {
+  color: #ff4081 !important;
+  font-weight: 600 !important;
+}
+
+.mobile-cta:hover {
+  background-color: rgba(255, 64, 129, 0.1) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 12px;
+  }
+
+  .desktop-menu {
+    display: none;
+  }
+
+  .mobile-menu-button {
+    display: block;
+  }
+
+  .brand-text {
+    font-size: 1.1rem;
+  }
+
+  .brand-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .brand-text {
+    font-size: 1rem;
+  }
+
+  .brand-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+  }
+}
+
+/* Animaciones */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.navbar {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Estados de hover mejorados */
+.nav-button, .cta-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-button:hover::after,
+.nav-button.active::after {
+  width: 80%;
+}
+
+/* Mejoras de accesibilidad */
+.nav-button:focus,
+.cta-button:focus,
+.mobile-menu-button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+  }
+}

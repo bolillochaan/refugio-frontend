@@ -1,0 +1,169 @@
+<!-- src/app/components/animal-detail/animal-detail.component.html -->
+<div class="detail-container" *ngIf="!loading && animal">
+  <!-- Header con botones de acción -->
+  <div class="detail-header">
+    <button mat-icon-button (click)="volver()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ animal.nombre }}</h1>
+    <div class="action-buttons">
+      <button mat-raised-button color="primary" (click)="editarAnimal()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+      <button mat-raised-button color="warn" (click)="eliminarAnimal()">
+        <mat-icon>delete</mat-icon>
+        Eliminar
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="detail-content">
+    <!-- Imagen y información básica -->
+    <div class="basic-info-section">
+      <mat-card class="photo-card">
+        <img 
+          [src]="animal.fotoUrl || '/assets/placeholder-animal.jpg'" 
+          [alt]="animal.nombre"
+          class="animal-photo">
+      </mat-card>
+
+      <mat-card class="basic-info-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>pets</mat-icon>
+          <mat-card-title>Información Básica</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <mat-icon>pets</mat-icon>
+              <div>
+                <label>Especie:</label>
+                <span>{{ animal.especie }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>category</mat-icon>
+              <div>
+                <label>Raza:</label>
+                <span>{{ animal.raza }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>cake</mat-icon>
+              <div>
+                <label>Edad:</label>
+                <span>{{ animal.edadAproximada }} años</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>monitor_weight</mat-icon>
+              <div>
+                <label>Peso:</label>
+                <span>{{ animal.peso }} kg</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>palette</mat-icon>
+              <div>
+                <label>Color:</label>
+                <span>{{ animal.color }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>{{ getSexoIcon(animal.sexo) }}</mat-icon>
+              <div>
+                <label>Sexo:</label>
+                <span>{{ animal.sexo }}</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <mat-icon>calendar_today</mat-icon>
+              <div>
+                <label>Fecha de Ingreso:</label>
+                <span>{{ formatearFecha(animal.fechaIngreso) }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Estado y disponibilidad -->
+    <div class="status-section">
+      <mat-card class="status-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>health_and_safety</mat-icon>
+          <mat-card-title>Estado y Disponibilidad</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="status-content">
+            <div class="status-item">
+              <label>Estado de Salud:</label>
+              <mat-chip [color]="getEstadoColor(animal.estadoSalud)" selected>
+                {{ animal.estadoSalud.replace('_', ' ') }}
+              </mat-chip>
+            </div>
+
+            <div class="status-item">
+              <label>Disponible para Adopción:</label>
+              <mat-chip [color]="animal.disponibleAdopcion ? 'primary' : ''" 
+                        [selected]="animal.disponibleAdopcion">
+                {{ animal.disponibleAdopcion ? 'Sí' : 'No' }}
+              </mat-chip>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Descripción -->
+    <div class="description-section" *ngIf="animal.descripcion">
+      <mat-card class="description-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>description</mat-icon>
+          <mat-card-title>Descripción</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="description-text">{{ animal.descripcion }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Historial Médico -->
+    <div class="medical-section" *ngIf="animal.historialMedico">
+      <mat-card class="medical-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>medical_services</mat-icon>
+          <mat-card-title>Historial Médico</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="medical-text">{{ animal.historialMedico }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+  <p>Cargando información del animal...</p>
+</div>
+
+<!-- Error state -->
+<div class="error-state" *ngIf="!loading && !animal">
+  <mat-icon>error</mat-icon>
+  <h2>Animal no encontrado</h2>
+  <p>El animal que buscas no existe o ha sido eliminado.</p>
+  <button mat-raised-button color="primary" (click)="volver()">
+    Volver a la lista
+  </button>
+</div>

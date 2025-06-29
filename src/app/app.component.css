@@ -1,0 +1,42 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.main-content {
+  min-height: calc(100vh - 128px); /* 64px para header + 64px para footer */
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+nav a {
+  margin-right: 10px;
+}
+
+nav a mat-icon {
+  margin-right: 5px;
+}
+
+.active-link {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav a {
+    margin-right: 5px;
+    font-size: 12px;
+  }
+  
+  nav a mat-icon {
+    margin-right: 2px;
+  }
+  
+  .main-content {
+    padding: 10px;
+  }
+}
