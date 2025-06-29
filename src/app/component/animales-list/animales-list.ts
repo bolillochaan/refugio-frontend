@@ -1,17 +1,38 @@
 // components/animales-list/animales-list.component.ts
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PageEvent } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 import { AnimalService } from '../../services/animal.service';
 import { Animal } from '../../models/animal.model';
 
 @Component({
   selector: 'app-animales-list',
+  standalone: true,
   templateUrl: './animales-list.html',
   styleUrls: ['./animales-list.css'],
-  standalone: true // solo si lo usas como standalone
+  imports: [
+    CommonModule,
+    FormsModule,
+    SlicePipe,
+    MatCardModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule
+  ]
 })
 export class AnimalesListComponent implements OnInit {
   animales: Animal[] = [];
@@ -69,11 +90,11 @@ export class AnimalesListComponent implements OnInit {
     }
   }
 
-
   onPageChange(event: PageEvent) {
-  this.pageIndex = event.pageIndex;
-  this.pageSize = event.pageSize;
-}
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+  }
+
   verDetalles(id: number): void {
     this.router.navigate(['/animales', id]);
   }

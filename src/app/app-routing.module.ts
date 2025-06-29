@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'animales', component: AnimalesListComponent },
   { path: 'animales/crear', component: AnimalFormComponent },
   { path: 'animales/editar/:id', component: AnimalFormComponent },
-  { path: 'animales/:id', component: AnimalDetailComponent },
+  { path: 'detalle/:id', component: AnimalDetailComponent },
   { path: 'estadisticas', component: EstadisticasComponent },
   { path: '**', redirectTo: '' }
 ];
