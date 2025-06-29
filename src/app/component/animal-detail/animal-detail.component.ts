@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnimalService } from '../../services/animal.service';
 import { Animal } from '../../models/animal.model';
@@ -19,6 +20,7 @@ import { Animal } from '../../models/animal.model';
     CommonModule,
     MatCardModule,
     MatIconModule,
+    MatChipsModule,
     MatProgressSpinnerModule,
   ]
 })
@@ -105,9 +107,11 @@ export class AnimalDetailComponent implements OnInit {
     }
   }
 
-  getSexoIcon(sexo: string): string {
-    return sexo === 'MACHO' ? 'male' : 'female';
-  }
+getSexoIcon(sexo?: string): string {
+  if (!sexo) return 'help_outline';
+  return sexo === 'Macho' ? 'male' : 'female';
+}
+
 
   formatearFecha(fecha: Date): string {
     return new Date(fecha).toLocaleDateString('es-ES', {

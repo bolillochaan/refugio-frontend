@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms';
 
 // Material modules
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -70,9 +73,13 @@ interface EstadisticasPorMes {
     MatCheckboxModule,
     MatDialogModule,
     MatButtonModule,
-    MatTableModule
+     MatDatepickerModule,
+      MatInputModule,
+      MatNativeDateModule,
+      MatProgressSpinnerModule
   ]
 })
+
 export class EstadisticasComponent implements OnInit, OnDestroy {
   tipoExport: string = 'pdf';
   nombreArchivo: string = '';
@@ -417,6 +424,24 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     link.download = `estadisticas-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  // Métodos auxiliares para gráficos circulares o barras
+  getCircunferencia(): number {
+    // Por ejemplo, radio 45 para SVG circular progress
+    return 2 * Math.PI * 45;
+  }
+
+  getOffset(index: number): number {
+    // Lógica para calcular el offset de un gráfico circular o barra
+    // Ajusta según tu necesidad real
+    return index * 10;
+  }
+
+  getMaxAdopciones(): number {
+    // Devuelve el máximo de adopciones para normalizar gráficos
+    // Puedes calcularlo dinámicamente si lo necesitas
+    return Math.max(...this.estadisticasPorMes.map(m => m.adopciones), 1);
   }
 
   // Métodos auxiliares para el template
