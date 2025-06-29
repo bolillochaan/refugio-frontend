@@ -1,6 +1,7 @@
 // app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MatChipsModule } from '@angular/material/chips'; // <-- Agregado
 import { HomeComponent } from './component/home/home.component';
 import { AnimalesListComponent } from './component/animales-list/animales-list';
 import { AnimalDetailComponent } from './component/animal-detail/animal-detail.component';
@@ -19,7 +20,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes),
+    MatChipsModule // <-- Agregado aquí
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
