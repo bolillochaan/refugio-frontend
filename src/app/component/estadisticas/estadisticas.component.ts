@@ -8,10 +8,16 @@ import { AnimalService } from '../../services/animal.service';
 import { AdopcionService } from '../../services/adopcion.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+// Material modules
+import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 
 type Tendencia = 'up' | 'down' | 'stable';
 
@@ -48,15 +54,22 @@ interface EstadisticasPorMes {
   imports: [
     CommonModule,
     FormsModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
     MatCheckboxModule,
     MatDialogModule,
-    MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableModule
   ],
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.css']
 })
 export class EstadisticasComponent implements OnInit, OnDestroy {
+  tipoExport: string = 'pdf';
+  nombreArchivo: string = '';
+
   private destroy$ = new Subject<void>();
   
   // Estados de carga
@@ -336,6 +349,8 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     this.cargarEstadisticas();
   }
   
+  
+  
   exportarEstadisticas(): void {
     const datos = {
       fecha: new Date().toISOString(),
@@ -352,7 +367,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     link.click();
     window.URL.revokeObjectURL(url);
   }
-  
+
   // Métodos auxiliares para el template
   
   obtenerIconoTendencia(tendencia: string): string {
@@ -418,4 +433,11 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     // lógica para exportar
     setTimeout(() => this.exportando = false, 2000);
   }
+
+  dismissAlerta(id: number) {
+    // lógica para cerrar o eliminar la alerta con id dado
+    console.log('Alerta cerrada:', id);
+  }
+
+  // Define aquí las demás propiedades y métodos que uses en el template
 }
