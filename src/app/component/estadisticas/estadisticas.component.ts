@@ -73,10 +73,10 @@ interface EstadisticasPorMes {
     MatCheckboxModule,
     MatDialogModule,
     MatButtonModule,
-     MatDatepickerModule,
-      MatInputModule,
-      MatNativeDateModule,
-      MatProgressSpinnerModule
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTableModule,             // ✅ Importa MatTableModule para mat-table
+    MatProgressSpinnerModule    // ✅ Importa MatProgressSpinnerModule para mat-spinner
   ]
 })
 

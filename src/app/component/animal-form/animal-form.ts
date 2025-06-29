@@ -12,7 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-animal-form',
@@ -26,7 +27,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatSelectModule,
     MatOptionModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule,
+    MatProgressSpinnerModule
   ]
 })
 export class AnimalFormComponent implements OnInit {
