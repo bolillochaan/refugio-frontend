@@ -72,26 +72,27 @@
     <div class="metricas-principales">
       <div class="metrica-card">
         <div class="metrica-header">
-          <mat-icon class="metrica-icon animals">pets</mat-icon>
-          <div class="metrica-info">
-            <span class="metrica-label">Total de Animales</span>
-            <div class="metrica-valor">
-              {{ formatearNumero(estadisticasGenerales.totalAnimales.valor) }}
-              <div class="tendencia" [class]="obtenerColorTendencia(metricasTendencia.totalAnimales.tendencia)">
-                <mat-icon>{{ obtenerIconoTendencia(metricasTendencia.totalAnimales.tendencia) }}</mat-icon>
-                <span>{{ formatearPorcentaje(metricasTendencia.totalAnimales.porcentajeCambio) }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+  <mat-icon class="metrica-icon animals">pets</mat-icon>
+  <div class="metrica-info">
+    <span class="metrica-label">Total de Animales</span>
+    <div class="metrica-valor">
+      {{ estadisticasGenerales.totalAnimales?.valor ?? 0 }}
+      <div class="tendencia" [class]="metricasTendencia.totalAnimales?.tendencia ?? ''">
+        <mat-icon>{{ metricasTendencia.totalAnimales?.tendencia ?? '' }}</mat-icon>
+        <span>{{ metricasTendencia.totalAnimales?.porcentajeCambio ?? 0 }}%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
         <div class="metrica-detalles">
           <div class="detalle-item">
             <span class="detalle-label">Disponibles:</span>
-            {{ formatearNumero(estadisticasGenerales.animalesDisponibles?.valor) }}
+            {{ estadisticasGenerales.animalesDisponibles?.valor ?? 0 }}
           </div>
           <div class="detalle-item">
             <span class="detalle-label">Adoptados:</span>
-            <span class="detalle-valor adoptados">{{ formatearNumero(estadisticasGenerales.animalesAdoptados) }}</span>
+            <span class="detalle-valor adoptados">{{ estadisticasGenerales.animalesAdoptados?.valor ?? 0 }}</span>
           </div>
         </div>
       </div>
@@ -102,7 +103,7 @@
           <div class="metrica-info">
             <span class="metrica-label">Adopciones del Mes</span>
             <div class="metrica-valor">
-              {{ formatearNumero(estadisticasGenerales.adopcionesDelAno?.valor) }}
+             {{ estadisticasGenerales.adopcionesDelAno?.valor ?? 0 }}
 
               <div class="tendencia" [class]="obtenerColorTendencia(metricasTendencia.adopcionesDelMes.tendencia)">
                 <mat-icon>{{ obtenerIconoTendencia(metricasTendencia.adopcionesDelMes.tendencia) }}</mat-icon>
@@ -114,7 +115,7 @@
         <div class="metrica-detalles">
           <div class="detalle-item">
             <span class="detalle-label">Este año:</span>
-            <span class="detalle-valor">{{ formatearNumero(estadisticasGenerales.adopcionesEsteAno) }}</span>
+            <span class="detalle-valor">{{ estadisticasGenerales.adopcionesDelAno?.valor ?? 0 }}</span>
           </div>
         </div>
       </div>
@@ -127,11 +128,11 @@
             <div class="metrica-valor small">
               <div class="salud-grid">
                 <div class="salud-item tratamiento">
-                  <span class="salud-numero">{{ formatearNumero(estadisticasGenerales.animalesEnTratamiento) }}</span>
+                  <span class="salud-numero">{{ estadisticasGenerales.animalesEnTratamiento?.valor ?? 0 }}</span>
                   <span class="salud-label">En Tratamiento</span>
                 </div>
                 <div class="salud-item critico">
-                  <span class="salud-numero">{{ formatearNumero(estadisticasGenerales.animalesCriticos) }}</span>
+                  <span class="salud-numero">{{ estadisticasGenerales.animalesCriticos?.valor ?? 0 }}</span>
                   <span class="salud-label">Críticos</span>
                 </div>
               </div>
