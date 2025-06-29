@@ -15,11 +15,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 
-import { EstadisticasComponent } from './estadisticas.component';
-
 @NgModule({
   declarations: [
-    EstadisticasComponent,
+    // ❌ Quitar EstadisticasComponent
     // otros componentes...
   ],
   imports: [
@@ -39,7 +37,7 @@ import { EstadisticasComponent } from './estadisticas.component';
     // otros módulos necesarios...
   ],
   exports: [
-    EstadisticasComponent
+    // ❌ Quitar EstadisticasComponent
   ]
 })
 export class EstadisticasModule { }

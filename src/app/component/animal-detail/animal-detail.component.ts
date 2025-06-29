@@ -1,18 +1,26 @@
 // src/app/components/animal-detail/animal-detail.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnimalService } from '../../services/animal.service';
 import { Animal } from '../../models/animal.model';
-import { Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-animal-detail',
+  standalone: true,
   templateUrl: './animal-detail.html',
   styleUrls: ['./animal-detail.css'],
-  standalone: true // <-- Agrega esto si es standalone
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+  ]
 })
 export class AnimalDetailComponent implements OnInit {
   animal: Animal | null = null;

@@ -58,6 +58,8 @@ interface EstadisticasPorMes {
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
+  templateUrl: './estadisticas.component.html',
+  styleUrls: ['./estadisticas.component.css'],
   imports: [
     CommonModule,
     FormsModule,
@@ -69,9 +71,7 @@ interface EstadisticasPorMes {
     MatDialogModule,
     MatButtonModule,
     MatTableModule
-  ],
-  templateUrl: './estadisticas.component.html',
-  styleUrls: ['./estadisticas.component.css']
+  ]
 })
 export class EstadisticasComponent implements OnInit, OnDestroy {
   tipoExport: string = 'pdf';
