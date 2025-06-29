@@ -108,10 +108,10 @@
 
             <div class="status-item">
               <label>Disponible para Adopción:</label>
-              <mat-chip [color]="animal?.disponibleAdopcion ? 'primary' : ''" 
-                        [selected]="animal?.disponibleAdopcion">
-                {{ animal?.disponibleAdopcion ? 'Sí' : 'No' }}
-              </mat-chip>
+             <mat-chip>
+  {{ animal?.disponibleAdopcion ? 'Disponible' : 'No disponible' }}
+</mat-chip>
+
             </div>
           </div>
         </mat-card-content>
