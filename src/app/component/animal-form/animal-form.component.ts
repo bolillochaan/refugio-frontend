@@ -78,12 +78,12 @@ export class AnimalFormComponent implements OnInit {
       edadAproximada: [1, [Validators.required, Validators.min(0), Validators.max(30)]],
       peso: [1, [Validators.required, Validators.min(0.1), Validators.max(200)]],
       color: ['', Validators.required],
-     
       estadoSalud: ['SALUDABLE', Validators.required],
       descripcion: [''],
       historialMedico: [''],
       disponibleAdopcion: [true],
-      fotoUrl: ['']
+      fotoUrl: [''],
+      fechaIngreso: [new Date().toISOString()] // <-- Agrega esto
     });
   }
 
@@ -102,7 +102,7 @@ export class AnimalFormComponent implements OnInit {
 
           estadoSalud: animal.estadoSalud,
           descripcion: animal.descripcion,
-
+          fechaIngreso: animal.fechaIngreso,
           disponibleAdopcion: animal.disponibleAdopcion,
           fotoUrl: animal.fotoUrl
         });

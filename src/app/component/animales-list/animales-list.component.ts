@@ -120,6 +120,17 @@ export class AnimalesListComponent implements OnInit {
     }
   }
 
+  getFotoUrl(animal: any): string {
+  // Si tiene fotoUrl, úsala; si no, usa el endpoint por ID; si tampoco, usa placeholder
+  if (animal.fotoUrl) {
+    return animal.fotoUrl;
+  }
+  if (animal.animalId) {
+    return `/api/animales/${animal.animalId}/foto`;
+  }
+  return '/assets/placeholder-animal.jpg';
+}
+
   private mostrarError(mensaje: string): void {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 5000,
