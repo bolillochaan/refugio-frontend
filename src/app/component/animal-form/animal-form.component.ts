@@ -50,10 +50,6 @@ export class AnimalFormComponent implements OnInit {
     { value: 'CRITICO', label: 'Crítico' }
   ];
 
-  sexos = [
-    { value: 'MACHO', label: 'Macho' },
-    { value: 'HEMBRA', label: 'Hembra' }
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -82,7 +78,7 @@ export class AnimalFormComponent implements OnInit {
       edadAproximada: [1, [Validators.required, Validators.min(0), Validators.max(30)]],
       peso: [1, [Validators.required, Validators.min(0.1), Validators.max(200)]],
       color: ['', Validators.required],
-      sexo: ['', Validators.required],
+     
       estadoSalud: ['SALUDABLE', Validators.required],
       descripcion: [''],
       historialMedico: [''],
@@ -103,11 +99,10 @@ export class AnimalFormComponent implements OnInit {
           raza: animal.raza,
           edadAproximada: animal.edadAproximada,
           peso: animal.peso,
-          color: animal.color,
-          sexo: animal.sexo,
+
           estadoSalud: animal.estadoSalud,
           descripcion: animal.descripcion,
-          historialMedico: animal.historialMedico,
+
           disponibleAdopcion: animal.disponibleAdopcion,
           fotoUrl: animal.fotoUrl
         });
@@ -207,7 +202,6 @@ export class AnimalFormComponent implements OnInit {
       'edadAproximada': 'La edad',
       'peso': 'El peso',
       'color': 'El color',
-      'sexo': 'El sexo',
       'estadoSalud': 'El estado de salud'
     };
     return labels[fieldName] || fieldName;

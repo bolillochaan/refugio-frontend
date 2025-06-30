@@ -90,17 +90,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Sexo</mat-label>
-            <mat-select formControlName="sexo">
-              <mat-option *ngFor="let sexo of sexos" [value]="sexo.value">
-                {{ sexo.label }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="isFieldInvalid('sexo')">
-              {{ getFieldError('sexo') }}
-            </mat-error>
-          </mat-form-field>
+         
         </div>
       </div>
 
@@ -128,17 +118,7 @@
           </mat-form-field>
         </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="form-field full-width">
-            <mat-label>Historial Médico</mat-label>
-            <textarea matInput 
-                      formControlName="historialMedico" 
-                      rows="3"
-                      placeholder="Vacunas, tratamientos, cirugías, alergias...">
-            </textarea>
-            <mat-icon matSuffix>medical_information</mat-icon>
-          </mat-form-field>
-        </div>
+        
       </div>
 
       <!-- Descripción y Foto -->
