@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnimalService } from '../../services/animal.service';
 import { Animal } from '../../models/animal.model';
+
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -65,9 +66,11 @@ export class HomeComponent implements OnInit {
     // Cargar estadísticas
     this.animalService.obtenerEstadisticas().subscribe({
       next: (stats) => {
-        this.estadisticas.totalAnimales = stats.totalAnimales;
-        this.estadisticas.animalesDisponibles = stats.animalesDisponiblesAdopcion;
-        this.estadisticas.animalesEnTratamiento = stats.animalesPorEstado['EN_TRATAMIENTO'] || 0;
+        this.estadisticas.totalAnimales = stats.totalAnimales ?? 0;
+        this.estadisticas.animalesDisponibles = stats.animalesDisponiblesAdopcion ?? 0;
+        this.estadisticas.animalesEnTratamiento = stats.animalesPorEstado?.['en tratamiento'] ?? 0;
+
+
         this.loading = false;
       },
       error: (error) => {
