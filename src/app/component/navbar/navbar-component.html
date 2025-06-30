@@ -1,21 +1,24 @@
-<mat-toolbar color="primary" class="navbar">
-  <!-- Logo y título -->
-  <div class="navbar-brand" (click)="navigateTo('/')">
-    <mat-icon class="brand-icon">pets</mat-icon>
+<mat-toolbar class="navbar">
+  <!-- Logo y título con efectos mejorados -->
+  <div class="navbar-brand" (click)="navigateTo('/')" 
+       [attr.aria-label]="'Ir a inicio - Refugio de Animales'">
+    <mat-icon class="brand-icon" aria-hidden="true">pets</mat-icon>
     <span class="brand-text">Refugio de Animales</span>
   </div>
 
   <!-- Spacer para empujar el menú a la derecha -->
   <div class="spacer"></div>
 
-  <!-- Menú desktop -->
-  <nav class="desktop-menu">
+  <!-- Menú desktop con diseño tropical -->
+  <nav class="desktop-menu" role="navigation" aria-label="Navegación principal">
     <button 
       mat-button 
       class="nav-button" 
       [class.active]="isActiveRoute('/')"
-      (click)="navigateTo('/')">
-      <mat-icon>home</mat-icon>
+      (click)="navigateTo('/')"
+      [attr.aria-current]="isActiveRoute('/') ? 'page' : null"
+      type="button">
+      <mat-icon aria-hidden="true">home</mat-icon>
       <span>Inicio</span>
     </button>
     
@@ -23,8 +26,10 @@
       mat-button 
       class="nav-button" 
       [class.active]="isActiveRoute('/animales')"
-      (click)="navigateTo('/animales')">
-      <mat-icon>pets</mat-icon>
+      (click)="navigateTo('/animales')"
+      [attr.aria-current]="isActiveRoute('/animales') ? 'page' : null"
+      type="button">
+      <mat-icon aria-hidden="true">pets</mat-icon>
       <span>Animales</span>
     </button>
     
@@ -32,62 +37,80 @@
       mat-button 
       class="nav-button" 
       [class.active]="isActiveRoute('/estadisticas')"
-      (click)="navigateTo('/estadisticas')">
-      <mat-icon>assessment</mat-icon>
+      (click)="navigateTo('/estadisticas')"
+      [attr.aria-current]="isActiveRoute('/estadisticas') ? 'page' : null"
+      type="button">
+      <mat-icon aria-hidden="true">assessment</mat-icon>
       <span>Estadísticas</span>
     </button>
 
     <button 
       mat-raised-button 
-      color="accent" 
       class="cta-button"
-      (click)="navigateTo('/animales/nuevo')">
-      <mat-icon>add</mat-icon>
+      (click)="navigateTo('/animales/nuevo')"
+      [attr.aria-label]="'Agregar nuevo animal al refugio'"
+      type="button">
+      <mat-icon aria-hidden="true">add</mat-icon>
       <span>Agregar Animal</span>
     </button>
   </nav>
 
-  <!-- Menú móvil -->
+  <!-- Menú móvil con mejor accesibilidad -->
   <button 
     mat-icon-button 
     class="mobile-menu-button" 
-    [matMenuTriggerFor]="mobileMenu">
-    <mat-icon>menu</mat-icon>
+    [matMenuTriggerFor]="mobileMenu"
+    [attr.aria-label]="'Abrir menú de navegación'"
+    [attr.aria-expanded]="false"
+    type="button">
+    <mat-icon aria-hidden="true">menu</mat-icon>
   </button>
 
-  <!-- Menú desplegable móvil -->
-  <mat-menu #mobileMenu="matMenu" class="mobile-menu">
+  <!-- Menú desplegable móvil mejorado -->
+  <mat-menu #mobileMenu="matMenu" class="mobile-menu" role="menu">
     <button 
       mat-menu-item 
       [class.active]="isActiveRoute('/')"
-      (click)="navigateTo('/')">
-      <mat-icon>home</mat-icon>
+      (click)="navigateTo('/')"
+      [attr.aria-current]="isActiveRoute('/') ? 'page' : null"
+      role="menuitem"
+      type="button">
+      <mat-icon aria-hidden="true">home</mat-icon>
       <span>Inicio</span>
     </button>
     
     <button 
       mat-menu-item 
       [class.active]="isActiveRoute('/animales')"
-      (click)="navigateTo('/animales')">
-      <mat-icon>pets</mat-icon>
+      (click)="navigateTo('/animales')"
+      [attr.aria-current]="isActiveRoute('/animales') ? 'page' : null"
+      role="menuitem"
+      type="button">
+      <mat-icon aria-hidden="true">pets</mat-icon>
       <span>Animales</span>
     </button>
     
     <button 
       mat-menu-item 
       [class.active]="isActiveRoute('/estadisticas')"
-      (click)="navigateTo('/estadisticas')">
-      <mat-icon>assessment</mat-icon>
+      (click)="navigateTo('/estadisticas')"
+      [attr.aria-current]="isActiveRoute('/estadisticas') ? 'page' : null"
+      role="menuitem"
+      type="button">
+      <mat-icon aria-hidden="true">assessment</mat-icon>
       <span>Estadísticas</span>
     </button>
 
-    <mat-divider></mat-divider>
+    <mat-divider role="separator"></mat-divider>
     
     <button 
       mat-menu-item 
       class="mobile-cta"
-      (click)="navigateTo('/animales/nuevo')">
-      <mat-icon>add</mat-icon>
+      (click)="navigateTo('/animales/nuevo')"
+      [attr.aria-label]="'Agregar nuevo animal al refugio'"
+      role="menuitem"
+      type="button">
+      <mat-icon aria-hidden="true">add</mat-icon>
       <span>Agregar Animal</span>
     </button>
   </mat-menu>
