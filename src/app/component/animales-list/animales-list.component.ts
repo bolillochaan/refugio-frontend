@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HttpClient } from '@angular/common/http';
 
 import { AnimalService } from '../../services/animal.service';
 import { Animal } from '../../models/animal.model';
@@ -42,11 +43,13 @@ export class AnimalesListComponent implements OnInit {
   pageSize = 12;
   currentPage = 0;
   pageIndex = 0;
+  fotoUrls: { [id: number]: string } = {};
 
   constructor(
     private animalService: AnimalService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -121,15 +124,35 @@ export class AnimalesListComponent implements OnInit {
   }
 
   getFotoUrl(animal: any): string {
-  // Si tiene fotoUrl, úsala; si no, usa el endpoint por ID; si tampoco, usa placeholder
-  if (animal.fotoUrl) {
-    return animal.fotoUrl;
+    if (!animal) return '/assets/placeholder-animal.jpg';
+
+    // Si ya la tenemos en cache, la devolvemos
+    if (this.fotoUrls[animal.animalId]) {
+      return this.fotoUrls[animal.animalId];
+    }
+
+    // Si el animal tiene fotoUrl directo, úsalo
+    if (animal.fotoUrl) {
+      this.fotoUrls[animal.animalId] = animal.fotoUrl;
+      return animal.fotoUrl;
+    }
+
+    // Si tiene id, obtenemos la url del endpoint
+    if (animal.animalId) {
+      this.http.get<{ fotoUrl: string }>(`/api/animales/${animal.animalId}/foto`).subscribe({
+        next: (resp) => {
+          this.fotoUrls[animal.animalId] = resp.fotoUrl;
+        },
+        error: () => {
+          this.fotoUrls[animal.animalId] = '/assets/placeholder-animal.jpg';
+        }
+      });
+      // Mientras carga, muestra placeholder
+      return '/assets/placeholder-animal.jpg';
+    }
+
+    return '/assets/placeholder-animal.jpg';
   }
-  if (animal.animalId) {
-    return `/api/animales/${animal.animalId}/foto`;
-  }
-  return '/assets/placeholder-animal.jpg';
-}
 
   private mostrarError(mensaje: string): void {
     this.snackBar.open(mensaje, 'Cerrar', {

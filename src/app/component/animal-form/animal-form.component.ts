@@ -87,35 +87,35 @@ export class AnimalFormComponent implements OnInit {
     });
   }
 
-  cargarAnimal(): void {
-    if (!this.animalId) return;
+cargarAnimal(): void {
+  if (!this.animalId) return;
 
-    this.loading = true;
-    this.animalService.obtenerAnimalPorId(this.animalId).subscribe({
-      next: (animal) => {
-        this.animalForm.patchValue({
-          nombre: animal.nombre,
-          especie: animal.especie,
-          raza: animal.raza,
-          edadAproximada: animal.edadAproximada,
-          peso: animal.peso,
-
-          estadoSalud: animal.estadoSalud,
-          descripcion: animal.descripcion,
-          fechaIngreso: animal.fechaIngreso,
-          disponibleAdopcion: animal.disponibleAdopcion,
-          fotoUrl: animal.fotoUrl
-        });
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar animal:', error);
-        this.mostrarError('Error al cargar la información del animal');
-        this.loading = false;
-        this.router.navigate(['/animales']);
-      }
-    });
-  }
+  this.loading = true;
+  this.animalService.obtenerAnimalPorId(this.animalId).subscribe({
+    next: (animal) => {
+      this.animalForm.patchValue({
+        nombre: animal.nombre,
+        especie: animal.especie,
+        raza: animal.raza,
+        edadAproximada: animal.edadAproximada,
+        peso: animal.peso,
+        color: animal.color, // <-- Añade este campo
+        estadoSalud: animal.estadoSalud,
+        descripcion: animal.descripcion,
+        fechaIngreso: animal.fechaIngreso,
+        disponibleAdopcion: animal.disponibleAdopcion,
+        fotoUrl: animal.fotoUrl
+      });
+      this.loading = false;
+    },
+    error: (error) => {
+      console.error('Error al cargar animal:', error);
+      this.mostrarError('Error al cargar la información del animal');
+      this.loading = false;
+      this.router.navigate(['/animales']);
+    }
+  });
+}
 
   onSubmit(): void {
     if (this.animalForm.invalid) {
@@ -133,6 +133,7 @@ export class AnimalFormComponent implements OnInit {
 
     operacion.subscribe({
       next: (response) => {
+          console.log('Datos a enviar:', animalData); // <-- Agrega esto para depuración
         const mensaje = this.isEditMode 
           ? 'Animal actualizado exitosamente'
           : 'Animal registrado exitosamente';
@@ -143,6 +144,7 @@ export class AnimalFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al guardar animal:', error);
+          console.log('Datos a enviar:', animalData); // <-- Agrega esto para depuración
         const mensaje = this.isEditMode 
           ? 'Error al actualizar el animal'
           : 'Error al registrar el animal';
@@ -248,14 +250,18 @@ ocultarImagen(event: Event): void {
   actualizarEstado(nuevoEstado: string): void {
     if (!this.animalId) return;
     this.animalService.actualizarEstado(this.animalId, nuevoEstado).subscribe({
-      next: (animalActualizado) => {
-        this.animalForm.patchValue({
-          estadoSalud: animalActualizado.estadoSalud
-        });
+      next: () => {
         this.mostrarExito('Estado actualizado correctamente');
+        // Recarga todos los datos del animal desde el backend
+        this.cargarAnimal();
         // Si el nuevo estado es 'ADOPTADO', manda el correo
         if (nuevoEstado === 'ADOPTADO') {
-          this.enviarCorreoAdopcion(animalActualizado);
+          // Espera a que cargarAnimal termine para tener los datos actualizados
+          setTimeout(() => {
+            if (this.animalForm.value) {
+              this.enviarCorreoAdopcion(this.animalForm.value);
+            }
+          }, 500);
         }
       },
       error: () => this.mostrarError('No se pudo actualizar el estado')

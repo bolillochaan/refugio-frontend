@@ -109,12 +109,6 @@ export class AnimalDetailComponent implements OnInit {
     }
   }
 
-getSexoIcon(sexo?: string): string {
-  if (!sexo) return 'help_outline';
-  return sexo === 'Macho' ? 'male' : 'female';
-}
-
-
   formatearFecha(fecha: Date): string {
     return new Date(fecha).toLocaleDateString('es-ES', {
       year: 'numeric',
@@ -125,6 +119,17 @@ getSexoIcon(sexo?: string): string {
 
   enviarCorreoAdopcion(animal: Animal) {
     return this.http.post('/api/api/animales/enviar-correo-adopcion', animal);
+  }
+
+  getFotoUrl(animal: any): string {
+    if (!animal) return '/assets/placeholder-animal.jpg';
+    if (animal.fotoUrl) return animal.fotoUrl;
+    if (animal.id || animal.animalId) {
+      // Usa el campo correcto según tu modelo
+      const id = animal.id || animal.animalId;
+      return `/api/animales/${id}/foto`;
+    }
+    return '/assets/placeholder-animal.jpg';
   }
 
   private mostrarError(mensaje: string): void {

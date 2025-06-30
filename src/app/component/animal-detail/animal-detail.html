@@ -24,7 +24,7 @@
     <div class="basic-info-section">
       <mat-card class="photo-card">
         <img 
-          [src]="animal?.fotoUrl || '/assets/placeholder-animal.jpg'" 
+          [src]="getFotoUrl(animal)" 
           [alt]="animal?.nombre"
           class="animal-photo">
       </mat-card>
