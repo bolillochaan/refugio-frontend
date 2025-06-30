@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = 'http://localhost:8080/api/api';
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
     'Authorization': 'Basic ' + btoa('admin:admin123')
