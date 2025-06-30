@@ -1,5 +1,6 @@
 // models/animal.model.ts
 export interface Animal {
+  id: number;
   animalId?: number;
   nombre: string;
   especie: string;

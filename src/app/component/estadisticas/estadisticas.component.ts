@@ -22,6 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 
@@ -410,21 +412,68 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   
   
   exportarEstadisticas(): void {
-    const datos = {
-      fecha: new Date().toISOString(),
-      estadisticasGenerales: this.estadisticasGenerales,
-      estadisticasPorEspecie: this.estadisticasPorEspecie,
-      estadisticasPorMes: this.estadisticasPorMes
-    };
-    
-    const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `estadisticas-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-    window.URL.revokeObjectURL(url);
-  }
+  const doc = new jsPDF();
+
+  // Título
+  doc.setFontSize(18);
+  doc.text('Estadísticas del Refugio', 14, 18);
+
+  // Fecha
+  doc.setFontSize(11);
+  doc.text(`Fecha de exportación: ${new Date().toLocaleString()}`, 14, 26);
+
+  // Estadísticas Generales
+  doc.setFontSize(14);
+  doc.text('Estadísticas Generales', 14, 36);
+
+  const generales = Object.entries(this.estadisticasGenerales).map(([k, v]: any) => [
+    k,
+    v.valor
+  ]);
+  autoTable(doc, {
+    head: [['Métrica', 'Valor']],
+    body: generales,
+    startY: 40,
+    theme: 'striped'
+  });
+
+  // Estadísticas por Especie
+  let y = (doc as any).lastAutoTable.finalY + 10 || 60;
+  doc.setFontSize(14);
+  doc.text('Estadísticas por Especie', 14, y);
+
+  autoTable(doc, {
+    head: [['Especie', 'Total', 'Disponibles', 'Adoptados', 'Porcentaje']],
+    body: this.estadisticasPorEspecie.map(e => [
+      e.especie,
+      e.total,
+      e.disponibles,
+      e.adoptados,
+      `${e.porcentaje.toFixed(1)}%`
+    ]),
+    startY: y + 4,
+    theme: 'striped'
+  });
+
+  // Estadísticas por Mes
+  y = (doc as any).lastAutoTable.finalY + 10 || y + 30;
+  doc.setFontSize(14);
+  doc.text('Estadísticas por Mes', 14, y);
+
+  autoTable(doc, {
+    head: [['Mes', 'Adopciones', 'Ingresos']],
+    body: this.estadisticasPorMes.map(m => [
+      m.mes,
+      m.adopciones,
+      m.ingresos
+    ]),
+    startY: y + 4,
+    theme: 'striped'
+  });
+
+  // Descargar PDF
+  doc.save(`estadisticas-${new Date().toISOString().split('T')[0]}.pdf`);
+}
 
   // Métodos auxiliares para gráficos circulares o barras
   getCircunferencia(): number {

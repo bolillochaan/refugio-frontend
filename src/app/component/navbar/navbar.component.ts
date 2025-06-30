@@ -1,9 +1,11 @@
-// components/navbar/navbar.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -11,28 +13,13 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
+    RouterModule
   ],
-  template: `
-    <mat-toolbar color="primary">
-      <mat-icon>pets</mat-icon>
-      <span style="margin-left: 8px;">Refugio de Animales</span>
-      <span class="spacer"></span>
-      <button mat-button (click)="navigateTo('/')">Inicio</button>
-      <button mat-button (click)="navigateTo('/animales')">Animales</button>
-      <button mat-button (click)="navigateTo('/estadisticas')">Estadísticas</button>
-    </mat-toolbar>
-  `,
-  styles: [`
-    .spacer {
-      flex: 1 1 auto;
-    }
-  `]
+  templateUrl: './navbar-component.html',
+  styleUrls: ['./navbar-component.css']
 })
-export class NavbarComponent {
-  constructor(private router: Router) {}
-
-  navigateTo(route: string): void {
-    this.router.navigate([route]);
-  }
-}
+export class NavbarComponent {}

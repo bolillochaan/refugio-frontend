@@ -250,4 +250,28 @@ ocultarImagen(event: Event): void {
       reader.readAsDataURL(file);
     }
   }
+
+  actualizarEstado(nuevoEstado: string): void {
+    if (!this.animalId) return;
+    this.animalService.actualizarEstado(this.animalId, nuevoEstado).subscribe({
+      next: (animalActualizado) => {
+        this.animalForm.patchValue({
+          estadoSalud: animalActualizado.estadoSalud
+        });
+        this.mostrarExito('Estado actualizado correctamente');
+        // Si el nuevo estado es 'ADOPTADO', manda el correo
+        if (nuevoEstado === 'ADOPTADO') {
+          this.enviarCorreoAdopcion(animalActualizado);
+        }
+      },
+      error: () => this.mostrarError('No se pudo actualizar el estado')
+    });
+  }
+
+  enviarCorreoAdopcion(animal: Animal): void {
+    this.animalService.enviarCorreoAdopcion(animal).subscribe({
+      next: () => this.mostrarExito('Correo de adopción enviado al refugio'),
+      error: () => this.mostrarError('No se pudo enviar el correo de adopción')
+    });
+  }
 }

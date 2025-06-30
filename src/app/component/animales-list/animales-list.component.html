@@ -1,21 +1,18 @@
-<!-- components/animales-list/animales-list.component.html -->
 <div class="container">
   <div class="header">
     <h1>Animales en el Refugio</h1>
-    
-    <div class="search-section" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="start center">
-      <mat-form-field fxFlex="1">
+
+ <div class="search-section" fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start center">
+      <mat-form-field fxFlex="1" appearance="outline" class="search-input">
         <mat-label>Buscar animales...</mat-label>
-        <input matInput [(ngModel)]="searchTerm" (keyup.enter)="buscarAnimales()">
-        <mat-icon matSuffix>search</mat-icon>
+        <input matInput [(ngModel)]="searchTerm" (keyup.enter)="buscarAnimales()" placeholder="Nombre, especie, raza...">
+        <button mat-icon-button matSuffix (click)="buscarAnimales()" class="search-icon-btn">
+          <mat-icon>search</mat-icon>
+        </button>
       </mat-form-field>
-      
-      <button mat-outlined-button (click)="buscarAnimales()">
-        <mat-icon>search</mat-icon>
-        Buscar
-      </button>
-      
-      <button mat-raised-button color="primary" (click)="crearAnimal()">
+
+  
+      <button mat-raised-button color="primary" (click)="crearAnimal()" class="add-btn">
         <mat-icon>add</mat-icon>
         Agregar Animal
       </button>
@@ -23,14 +20,25 @@
   </div>
 
   <div *ngIf="loading" class="loading">
-    <mat-spinner></mat-spinner>
+    <mat-spinner diameter="60"></mat-spinner>
+    <p class="loading-text">Cargando animales...</p>
+  </div>
+
+  <div *ngIf="!loading && animales.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">pets</mat-icon>
+    <h3>No se encontraron animales</h3>
+    <p>Intenta con otros términos de búsqueda o agrega un nuevo animal al refugio.</p>
+    <button mat-raised-button color="primary" (click)="crearAnimal()">
+      <mat-icon>add</mat-icon>
+      Agregar Primer Animal
+    </button>
   </div>
 
   <div *ngIf="!loading" class="animals-grid" fxLayout="row wrap" fxLayoutGap="24px grid">
     <div fxFlex="33" fxFlex.sm="50" fxFlex.xs="100" *ngFor="let animal of animales">
       <mat-card class="animal-card">
         <img mat-card-image [src]="animal.fotoUrl || '/assets/placeholder-animal.jpg'" [alt]="animal.nombre">
-        
+
         <mat-card-header>
           <mat-card-title>{{ animal.nombre }}</mat-card-title>
           <mat-card-subtitle>{{ animal.especie }} • {{ animal.raza }}</mat-card-subtitle>
@@ -38,7 +46,7 @@
 
         <mat-card-content>
           <p><strong>Edad:</strong> {{ animal.edadAproximada }} años</p>
-          
+
           <div class="chips">
             <mat-chip [color]="getEstadoColor(animal.estadoSalud)" selected>
               {{ animal.estadoSalud.replace('_', ' ') }}
@@ -54,19 +62,28 @@
         </mat-card-content>
 
         <mat-card-actions align="end">
-          <button mat-button (click)="verDetalles(animal.animalId!)">Ver Detalles</button>
-          <button mat-button (click)="editarAnimal(animal.animalId!)">Editar</button>
+          <button mat-button color="accent" (click)="verDetalles(animal.animalId!)">
+            <mat-icon>visibility</mat-icon>
+            Ver Detalles
+          </button>
+          <button mat-button color="warn" (click)="editarAnimal(animal.animalId!)">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>
   </div>
 
+  <!-- Paginación -->
   <mat-paginator
-    *ngIf="!loading"
+    *ngIf="!loading && animales.length > 0"
     [length]="totalElements"
     [pageSize]="pageSize"
     [pageSizeOptions]="[6, 12, 24, 48]"
+    [pageIndex]="currentPage"
     (page)="onPageChange($event)"
-    showFirstLastButtons>
+    showFirstLastButtons
+    class="custom-paginator">
   </mat-paginator>
-</div>
+

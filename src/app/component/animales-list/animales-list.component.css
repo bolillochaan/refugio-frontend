@@ -1,67 +1,459 @@
-/* components/animales-list/animales-list.component.css */
-.container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* ===== VARIABLES CSS ===== */
+:root {
+  --tropical-peach: #FFB6B6;
+  --tropical-lavender: #C5A3FF;
+  --tropical-coral: #FF6B6B;
+  --tropical-turquoise: #4ECDC4;
+  --tropical-blue: #45B7D1;
+  --dark-blue: #2C3E50;
+  --warm-gray: #7F8C8D;
+  --success-green: #27AE60;
+  --warning-orange: #F39C12;
+  --danger-red: #E74C3C;
+  
+  --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.12);
+  --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.18);
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.25);
+  
+  --border-radius: 16px;
+  --border-radius-large: 24px;
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.container {
+  padding: 32px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* ===== HEADER SECTION ===== */
 .header {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 .header h1 {
-  margin-bottom: 24px;
-  color: #333;
+  margin-bottom: 32px;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #6f7b88 !important;
+  position: relative;
 }
 
+.header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, var(--tropical-coral), var(--tropical-turquoise));
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ===== SEARCH SECTION ===== */
+
+.search-icon-btn {
+  color: #45b7d1 !important;         /* Color del icono */
+  background: transparent !important;    /* Fondo claro */
+  border-radius: 100% !important;     /* Botón redondo */
+  border-color: transparent !important; /* Sin borde */
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.search-icon-btn:hover {
+  color: #2C3E50 !important;            /* Icono blanco al pasar el mouse */
+}
+
+/* Estilo para la barra de búsqueda */
 .search-section {
-  margin-bottom: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 20px 24px;
+  border-color: transparent !important;
+  color: var(--dark-blue) !important;
+  box-shadow: 0 4px 15px rgba(69, 183, 209, 0.08);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
+/* Estilo para el campo de búsqueda */
+.search-input {
+  min-width: 220px;
+  max-width: 400px;
+  border: transparent !important;
+}
+
+/* Mejora el input dentro del mat-form-field */
+::ng-deep .search-input .mat-mdc-form-field-infix {
+  background: transparent !important;
+  border-radius: 12px;
+  color: var(--dark-blue) !important;
+  border: transparent !important;
+  padding: 0 8px;
+}
+
+/* Para el input de búsqueda */
+::ng-deep .search-input .mat-mdc-input-element {
+
+  border-radius: 12px !important;
+  color: #1976d2 !important;
+  font-weight: 600;
+}
+
+
+
+
+/* Estilo para el botón de búsqueda */
+
+
+
+.add-btn {
+  border-color: transparent !important;
+  background: linear-gradient(135deg, #45b7d1, #4ecdc4) !important;
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 25px !important;
+  box-shadow: 0 4px 15px rgba(69, 183, 209, 0.15);
+  padding: 0 24px;
+  min-width: 160px;
+  height: 48px;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-btn:hover {
+  background: linear-gradient(135deg, #4ecdc4, #45b7d1) !important;
+  box-shadow: 0 8px 24px rgba(69, 183, 209, 0.22);
+  transform: translateY(-2px) scale(1.03);
+}
+
+
+/* ===== LOADING STATE ===== */
 .loading {
   display: flex;
   justify-content: center;
-  padding: 48px;
+  align-items: center;
+  padding: 80px 20px;
+  flex-direction: column;
+  gap: 20px;
 }
 
+::ng-deep .mat-mdc-progress-spinner circle {
+  stroke: var(--tropical-blue);
+}
+
+/* ===== ANIMALS GRID ===== */
 .animals-grid {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
+  gap: 24px !important;
 }
 
+/* ===== ANIMAL CARD ===== */
 .animal-card {
   height: 100%;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease-in-out;
+  transition:all var(--transition-medium) ease !important;
+  border-radius: var(--border-radius-large);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+
+.animal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, var(--tropical-coral), var(--tropical-turquoise), var(--tropical-lavender));
+  z-index: 1;
+   transition:all var(--transition-medium) ease;
 }
 
 .animal-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-hover);
+   transition:all var(--transition-medium) ease;
 }
 
+/* Card Image */
 .animal-card img {
-  height: 200px;
+  height: 240px;
+  width: 100%;
   object-fit: cover;
+  transition: var(--transition-slow);
+  filter: brightness(1.05) saturate(1.1);
 }
 
-.animal-card mat-card-content {
+.animal-card:hover img {
+  transform: scale(1.08);
+  filter: brightness(1.1) saturate(1.2);
+}
+
+/* Card Header */
+::ng-deep .animal-card .mat-mdc-card-header {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(78, 205, 196, 0.08));
+  padding: 20px 20px 16px !important;
+  position: relative;
+}
+
+::ng-deep .animal-card .mat-mdc-card-title {
+  font-weight: 700 !important;
+  font-size: 1.4rem !important;
+  color: var(--dark-blue) !important;
+  margin-bottom: 4px !important;
+  line-height: 1.3;
+}
+
+::ng-deep .animal-card .mat-mdc-card-subtitle {
+  color: var(--warm-gray) !important;
+  font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  opacity: 0.8;
+}
+
+/* Card Content */
+::ng-deep .animal-card .mat-mdc-card-content {
+  padding: 20px !important;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
+.animal-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--dark-blue);
+}
+
+.animal-card p strong {
+  color: var(--tropical-blue);
+  font-weight: 600;
+}
+
+/* Chips Styling */
 .chips {
-  margin: 16px 0;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin: 0;
 }
 
+::ng-deep mat-chip {
+  border-radius: 20px !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
+  font-size: 0.8rem !important;
+  padding: 8px 16px !important;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-light);
+}
+
+::ng-deep mat-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Chip Colors */
+::ng-deep mat-chip[color="primary"] {
+  background: linear-gradient(135deg, var(--success-green), #2ECC71) !important;
+  color: white !important;
+}
+
+::ng-deep mat-chip.mat-mdc-chip-selected {
+  box-shadow: var(--shadow-medium);
+}
+
+/* Description */
 .description {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.4;
+  color: var(--warm-gray) !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  font-style: italic;
+  opacity: 0.9;
+  margin-top: auto;
 }
 
-mat-paginator {
-  background: transparent;
+/* Card Actions */
+::ng-deep .animal-card .mat-mdc-card-actions {
+  padding: 16px 20px 20px !important;
+  gap: 12px;
+  background: rgba(248, 249, 250, 0.8);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+::ng-deep .animal-card .mat-mdc-card-actions button {
+  border-radius: 20px !important;
+  font-weight: 500 !important;
+  text-transform: capitalize !important;
+  padding: 8px 20px !important;
+  transition: var(--transition-medium);
+  font-size: 0.875rem !important;
+  min-width: auto !important;
+}
+
+::ng-deep .animal-card .mat-mdc-card-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+::ng-deep .animal-card .mat-mdc-card-actions button[color="accent"] {
+  color: var(--tropical-blue) !important;
+  background: rgba(69, 183, 209, 0.1) !important;
+}
+
+::ng-deep .animal-card .mat-mdc-card-actions button[color="warn"] {
+  color: var(--warning-orange) !important;
+  background: rgba(243, 156, 18, 0.1) !important;
+}
+
+/* ===== PAGINATOR ===== */
+::ng-deep mat-paginator {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: var(--border-radius-large) !important;
+  box-shadow: var(--shadow-medium);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 16px !important;
+  margin-top: 32px;
+}
+
+::ng-deep .mat-mdc-paginator-container {
+  padding: 0 !important;
+  min-height: 56px !important;
+}
+
+::ng-deep .mat-mdc-paginator-range-label {
+  color: var(--dark-blue) !important;
+  font-weight: 500 !important;
+}
+
+
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+  }
+  
+  .header {
+    margin-bottom: 24px;
+  }
+  
+  .header h1 {
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+  }
+  
+  .search-section {
+    padding: 20px;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .search-section > * {
+    width: 100% !important;
+    flex: none !important;
+  }
+  
+  button[mat-raised-button],
+  button[mat-outlined-button] {
+    min-width: 100%;
+    margin: 4px 0;
+  }
+  
+  .animals-grid {
+    gap: 16px !important;
+  }
+  
+  .animal-card img {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .search-section {
+    padding: 16px;
+  }
+  
+  ::ng-deep .animal-card .mat-mdc-card-header,
+  ::ng-deep .animal-card .mat-mdc-card-content,
+  ::ng-deep .animal-card .mat-mdc-card-actions {
+    padding: 16px !important;
+  }
+  
+  .animal-card img {
+    height: 180px;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dark-blue: #E8F4FD;
+    --warm-gray: #B8C5D1;
+  }
+  
+  .search-section,
+  .animal-card,
+  ::ng-deep mat-paginator {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  ::ng-deep .mat-mdc-form-field {
+    background: rgba(51, 65, 85, 0.9) !important;
+  }
+  
+  ::ng-deep .animal-card .mat-mdc-card-actions {
+    background: rgba(15, 23, 42, 0.8) !important;
+  }
 }

@@ -96,7 +96,7 @@ export class AnimalesListComponent implements OnInit {
   }
 
   verDetalles(id: number): void {
-    this.router.navigate(['/animales', id]);
+    this.router.navigate(['/animales/detalle', id]);
   }
 
   editarAnimal(id: number): void {

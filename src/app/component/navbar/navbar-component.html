@@ -1,22 +1,21 @@
 <mat-toolbar class="navbar">
-  <!-- Logo y título con efectos mejorados -->
-  <div class="navbar-brand" (click)="navigateTo('/')" 
-       [attr.aria-label]="'Ir a inicio - Refugio de Animales'">
+  <!-- Logo y título -->
+  <div class="navbar-brand" routerLink="/" aria-label="Ir a inicio - Refugio de Animales" style="cursor:pointer;">
     <mat-icon class="brand-icon" aria-hidden="true">pets</mat-icon>
-    <span class="brand-text">Refugio de Animales</span>
+    <span class="brand-text">Little-Pet</span>
   </div>
 
-  <!-- Spacer para empujar el menú a la derecha -->
   <div class="spacer"></div>
 
-  <!-- Menú desktop con diseño tropical -->
+  <!-- Menú desktop -->
   <nav class="desktop-menu" role="navigation" aria-label="Navegación principal">
     <button 
       mat-button 
       class="nav-button" 
-      [class.active]="isActiveRoute('/')"
-      (click)="navigateTo('/')"
-      [attr.aria-current]="isActiveRoute('/') ? 'page' : null"
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      aria-current="page"
       type="button">
       <mat-icon aria-hidden="true">home</mat-icon>
       <span>Inicio</span>
@@ -25,9 +24,8 @@
     <button 
       mat-button 
       class="nav-button" 
-      [class.active]="isActiveRoute('/animales')"
-      (click)="navigateTo('/animales')"
-      [attr.aria-current]="isActiveRoute('/animales') ? 'page' : null"
+      routerLink="/animales"
+      routerLinkActive="active"
       type="button">
       <mat-icon aria-hidden="true">pets</mat-icon>
       <span>Animales</span>
@@ -36,9 +34,8 @@
     <button 
       mat-button 
       class="nav-button" 
-      [class.active]="isActiveRoute('/estadisticas')"
-      (click)="navigateTo('/estadisticas')"
-      [attr.aria-current]="isActiveRoute('/estadisticas') ? 'page' : null"
+      routerLink="/estadisticas"
+      routerLinkActive="active"
       type="button">
       <mat-icon aria-hidden="true">assessment</mat-icon>
       <span>Estadísticas</span>
@@ -47,8 +44,8 @@
     <button 
       mat-raised-button 
       class="cta-button"
-      (click)="navigateTo('/animales/nuevo')"
-      [attr.aria-label]="'Agregar nuevo animal al refugio'"
+      routerLink="/animales/crear"
+      aria-label="Agregar nuevo animal al refugio"
       type="button">
       <mat-icon aria-hidden="true">add</mat-icon>
       <span>Agregar Animal</span>
@@ -60,19 +57,18 @@
     mat-icon-button 
     class="mobile-menu-button" 
     [matMenuTriggerFor]="mobileMenu"
-    [attr.aria-label]="'Abrir menú de navegación'"
-    [attr.aria-expanded]="false"
+    aria-label="Abrir menú de navegación"
     type="button">
     <mat-icon aria-hidden="true">menu</mat-icon>
   </button>
 
-  <!-- Menú desplegable móvil mejorado -->
   <mat-menu #mobileMenu="matMenu" class="mobile-menu" role="menu">
     <button 
       mat-menu-item 
-      [class.active]="isActiveRoute('/')"
-      (click)="navigateTo('/')"
-      [attr.aria-current]="isActiveRoute('/') ? 'page' : null"
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      aria-current="page"
       role="menuitem"
       type="button">
       <mat-icon aria-hidden="true">home</mat-icon>
@@ -81,9 +77,8 @@
     
     <button 
       mat-menu-item 
-      [class.active]="isActiveRoute('/animales')"
-      (click)="navigateTo('/animales')"
-      [attr.aria-current]="isActiveRoute('/animales') ? 'page' : null"
+      routerLink="/animales"
+      routerLinkActive="active"
       role="menuitem"
       type="button">
       <mat-icon aria-hidden="true">pets</mat-icon>
@@ -92,9 +87,8 @@
     
     <button 
       mat-menu-item 
-      [class.active]="isActiveRoute('/estadisticas')"
-      (click)="navigateTo('/estadisticas')"
-      [attr.aria-current]="isActiveRoute('/estadisticas') ? 'page' : null"
+      routerLink="/estadisticas"
+      routerLinkActive="active"
       role="menuitem"
       type="button">
       <mat-icon aria-hidden="true">assessment</mat-icon>
@@ -106,8 +100,8 @@
     <button 
       mat-menu-item 
       class="mobile-cta"
-      (click)="navigateTo('/animales/nuevo')"
-      [attr.aria-label]="'Agregar nuevo animal al refugio'"
+      routerLink="/animales/crear"
+      aria-label="Agregar nuevo animal al refugio"
       role="menuitem"
       type="button">
       <mat-icon aria-hidden="true">add</mat-icon>

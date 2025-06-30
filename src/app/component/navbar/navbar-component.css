@@ -6,7 +6,7 @@
   height: 72px;
   padding: 0 24px;
   box-shadow: 0 8px 32px rgba(255, 107, 107, 0.15);
-  background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%);
+  background: #3bb5ad  !important;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -20,7 +20,6 @@
   user-select: none;
   padding: 8px 16px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
 }
 
@@ -35,20 +34,19 @@
   width: 32px;
   height: 32px;
   margin-right: 12px;
-  color: #fff;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  color: #ffffff;
+ 
   animation: heartbeat 2s ease-in-out infinite;
 }
 
 .brand-text {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #fff;
+  color: #feffff;
   letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(45deg, #fff, #feca57);
+ 
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+
   background-clip: text;
 }
 
@@ -109,7 +107,7 @@
 }
 
 .nav-button.active {
-  background: linear-gradient(135deg, #feca57 0%, #ff6b6b 100%);
+  background: linear-gradient(135deg, #feca57 0%, #4ecdc4 100%);
   color: #fff;
   box-shadow: 0 6px 20px rgba(254, 202, 87, 0.4);
   transform: translateY(-2px);
@@ -335,7 +333,7 @@
   left: 50%;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, #feca57, #ff6b6b);
+  background: linear-gradient(90deg, #ffffff, #ffffff);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(-50%);
   border-radius: 2px;

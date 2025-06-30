@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnimalService } from '../../services/animal.service';
+import { HttpClient } from '@angular/common/http';
 
 import { Animal } from '../../models/animal.model';
 
@@ -29,13 +30,13 @@ export class AnimalDetailComponent implements OnInit {
   animal: Animal | null = null;
   loading = true;
   animalId: number;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private animalService: AnimalService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private http: HttpClient
   ) {
     this.animalId = +this.route.snapshot.paramMap.get('id')!;
   }
@@ -120,6 +121,10 @@ getSexoIcon(sexo?: string): string {
       month: 'long',
       day: 'numeric'
     });
+  }
+
+  enviarCorreoAdopcion(animal: Animal) {
+    return this.http.post('/api/api/animales/enviar-correo-adopcion', animal);
   }
 
   private mostrarError(mensaje: string): void {
