@@ -8,7 +8,7 @@ export interface Animal {
   edadAproximada: number;
   peso: number;
   color: string;
-  sexo: 'MACHO' | 'HEMBRA';
+
   estadoSalud: 'SALUDABLE' | 'EN_TRATAMIENTO' | 'CRITICO';
   fechaIngreso: Date;
   descripcion?: string;
