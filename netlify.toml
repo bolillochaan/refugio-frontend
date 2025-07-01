@@ -4,8 +4,3 @@
 
 [build.environment]
   NODE_VERSION = "18.18.2"
-
-[[plugins]]
-  package = "@netlify/angular-runtime"
-  [plugins.inputs]
-    skip = true
