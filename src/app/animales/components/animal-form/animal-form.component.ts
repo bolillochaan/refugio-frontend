@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AnimalService } from '../../services/animal.service';
-import { Animal } from '../../models/animal.model';
+import { AnimalService } from '../../../services/animal.service';
+import { Animal } from '../../../models/animal.model';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog';
+import { ConfirmDialogComponent } from '../../../components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-animal-form',

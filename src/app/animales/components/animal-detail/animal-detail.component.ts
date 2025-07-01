@@ -8,10 +8,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AnimalService } from '../../services/animal.service';
+import { AnimalService } from '../../../services/animal.service';
 import { HttpClient } from '@angular/common/http';
 
-import { Animal } from '../../models/animal.model';
+import { Animal } from '../../../models/animal.model';
 
 @Component({
   selector: 'app-animal-detail',

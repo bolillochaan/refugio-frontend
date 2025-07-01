@@ -29,10 +29,10 @@ import { AppRoutingModule } from './app-routing.module';
 // Standalone components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
-import { AnimalesListComponent } from './component/animales-list/animales-list.component';
-import { AnimalDetailComponent } from './component/animal-detail/animal-detail.component';
-import { AnimalFormComponent } from './component/animal-form/animal-form.component';
-import { EstadisticasComponent } from './component/estadisticas/estadisticas.component';
+import { AnimalesListComponent } from './animales/components/animales-list/animales-list.component';
+import { AnimalDetailComponent } from './animales/components/animal-detail/animal-detail.component';
+import { AnimalFormComponent } from './animales/components/animal-form/animal-form.component';
+import { EstadisticasComponent } from './estadisticas/estadisticas/estadisticas.component';
 // Si tienes NavbarComponent standalone, impórtalo aquí también
 
 // Este archivo ya no es necesario porque migraste a standalone bootstrap con bootstrapApplication.

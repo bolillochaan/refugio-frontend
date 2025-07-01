@@ -14,8 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 
-import { AnimalService } from '../../services/animal.service';
-import { Animal } from '../../models/animal.model';
+import { AnimalService } from '../../../services/animal.service';
+import { Animal } from '../../../models/animal.model';
 
 @Component({
   selector: 'app-animales-list',
