@@ -3,17 +3,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { MaterialModule } from '../../../shared/material.module';
 import { AnimalService } from '../../../services/animal.service';
 import { Animal } from '../../../models/animal.model';
 import { LazyImageComponent } from '../../../components/lazy-image/lazy-image.component';
@@ -24,14 +18,7 @@ import { LazyImageComponent } from '../../../components/lazy-image/lazy-image.co
   imports: [
     CommonModule,
     FormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatChipsModule,
-    MatProgressSpinnerModule,
-    MatPaginatorModule,
+    MaterialModule,
     LazyImageComponent
   ],
   templateUrl: './animales-list.component.html',
@@ -49,8 +36,8 @@ export class AnimalesListComponent implements OnInit {
   constructor(
     private animalService: AnimalService,
     private router: Router,
-    private snackBar: MatSnackBar,
-    private http: HttpClient
+    private http: HttpClient,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -109,28 +96,28 @@ export class AnimalesListComponent implements OnInit {
     }
   }
 
-  getFotoUrl(animal: any): string {
+  getFotoUrl(animal: Animal): string {
     if (!animal) return '/assets/placeholder-animal.jpg';
 
     // Si ya la tenemos en cache, la devolvemos
-    if (this.fotoUrls[animal.animalId]) {
-      return this.fotoUrls[animal.animalId];
+    if (this.fotoUrls[animal.animalId!]) {
+      return this.fotoUrls[animal.animalId!];
     }
 
     // Si el animal tiene fotoUrl directo, úsalo
     if (animal.fotoUrl) {
-      this.fotoUrls[animal.animalId] = animal.fotoUrl;
+      this.fotoUrls[animal.animalId!] = animal.fotoUrl;
       return animal.fotoUrl;
     }
 
     // Si tiene id, obtenemos la url del endpoint
     if (animal.animalId) {
       this.http.get<{ fotoUrl: string }>(`/api/animales/${animal.animalId}/foto`).subscribe({
-        next: (resp) => {
-          this.fotoUrls[animal.animalId] = resp.fotoUrl;
+        next: (resp: { fotoUrl: string }) => {
+          this.fotoUrls[animal.animalId!] = resp.fotoUrl;
         },
         error: () => {
-          this.fotoUrls[animal.animalId] = '/assets/placeholder-animal.jpg';
+          this.fotoUrls[animal.animalId!] = '/assets/placeholder-animal.jpg';
         }
       });
       // Mientras carga, muestra placeholder
