@@ -1,6 +1,6 @@
 [build]
   command = "npm install && npm run build"
-  publish = "dist/refugio-frontend/browser"
+  publish = "dist/refugio-frontend/browser/browser"
 
 [build.environment]
   NODE_VERSION = "20.19.3"
