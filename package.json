@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && mkdir -p dist/refugio-frontend/browser/browser && mv dist/refugio-frontend/browser/* dist/refugio-frontend/browser/browser/",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
