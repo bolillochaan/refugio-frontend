@@ -2,8 +2,8 @@
   <div class="header">
     <h1>Animales en el Refugio</h1>
 
- <div class="search-section" fxLayout="row wrap" fxLayoutGap="16px" fxLayoutAlign="start center">
-      <mat-form-field fxFlex="1" appearance="outline" class="search-input">
+    <div class="search-section">
+      <mat-form-field appearance="outline" class="search-input">
         <mat-label>Buscar animales...</mat-label>
         <input matInput [(ngModel)]="searchTerm" (keyup.enter)="buscarAnimales()" placeholder="Nombre, especie, raza...">
         <button mat-icon-button matSuffix (click)="buscarAnimales()" class="search-icon-btn">
@@ -11,7 +11,6 @@
         </button>
       </mat-form-field>
 
-  
       <button mat-raised-button color="primary" (click)="crearAnimal()" class="add-btn">
         <mat-icon>add</mat-icon>
         Agregar Animal
@@ -34,18 +33,22 @@
     </button>
   </div>
 
-  <div *ngIf="!loading" class="animals-grid" fxLayout="row wrap" fxLayoutGap="24px grid">
-    <div fxFlex="33" fxFlex.sm="50" fxFlex.xs="100" *ngFor="let animal of animales">
+  <div *ngIf="!loading" class="animals-grid">
+    <div *ngFor="let animal of animales" class="animal-card-container">
       <mat-card class="animal-card">
-     
-
         <mat-card-header>
           <mat-card-title>{{ animal.nombre }}</mat-card-title>
           <mat-card-subtitle>{{ animal.especie }} • {{ animal.raza }}</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
-         
+          <!-- Usando LazyImageComponent para optimizar la carga de imágenes -->
+          <app-lazy-image 
+            [src]="animal.imagenUrl || 'assets/placeholder-animal.jpg'"
+            [alt]="'Imagen de ' + animal.nombre"
+            cssClass="animal-image"
+            placeholder="assets/placeholder-animal.jpg">
+          </app-lazy-image>
 
           <div class="chips">
             <mat-chip [color]="getEstadoColor(animal.estadoSalud)" selected>

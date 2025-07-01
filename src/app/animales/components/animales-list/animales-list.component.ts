@@ -1,48 +1,49 @@
 // components/animales-list/animales-list.component.ts
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, SlicePipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { PageEvent } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AnimalService } from '../../../services/animal.service';
 import { Animal } from '../../../models/animal.model';
+import { LazyImageComponent } from '../../../components/lazy-image/lazy-image.component';
 
 @Component({
   selector: 'app-animales-list',
   standalone: true,
-  templateUrl: './animales-list.component.html',
-  styleUrls: ['./animales-list.component.css'],
   imports: [
     CommonModule,
     FormsModule,
-    SlicePipe,
     MatCardModule,
+    MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule
-  ]
+    MatPaginatorModule,
+    LazyImageComponent
+  ],
+  templateUrl: './animales-list.component.html',
+  styleUrls: ['./animales-list.component.css']
 })
 export class AnimalesListComponent implements OnInit {
   animales: Animal[] = [];
   loading = false;
   searchTerm = '';
-  totalElements = 0;
-  pageSize = 12;
   currentPage = 0;
-  pageIndex = 0;
+  pageSize = 12;
+  totalElements = 0;
   fotoUrls: { [id: number]: string } = {};
 
   constructor(
@@ -60,50 +61,35 @@ export class AnimalesListComponent implements OnInit {
     this.loading = true;
     this.animalService.obtenerAnimales(this.currentPage, this.pageSize)
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.animales = response.content;
           this.totalElements = response.totalElements;
           this.loading = false;
         },
-        error: (error) => {
-          this.mostrarError('Error al cargar animales');
+        error: (error: any) => {
+          console.error('Error al cargar animales:', error);
           this.loading = false;
         }
       });
   }
 
   buscarAnimales(): void {
-    if (this.searchTerm.trim()) {
-      this.loading = true;
-      this.animalService.buscarPorNombre(this.searchTerm, 0, this.pageSize)
-        .subscribe({
-          next: (response) => {
-            this.animales = response.content;
-            this.totalElements = response.totalElements;
-            this.currentPage = 0;
-            this.loading = false;
-          },
-          error: () => {
-            this.mostrarError('Error al buscar animales');
-            this.loading = false;
-          }
-        });
-    } else {
-      this.cargarAnimales();
-    }
+    this.currentPage = 0;
+    this.cargarAnimales();
   }
 
-  onPageChange(event: PageEvent) {
-    this.pageIndex = event.pageIndex;
+  onPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.cargarAnimales();
   }
 
-  verDetalles(id: number): void {
-    this.router.navigate(['/animales/detalle', id]);
+  verDetalles(animalId: number): void {
+    this.router.navigate(['/animales/detalle', animalId]);
   }
 
-  editarAnimal(id: number): void {
-    this.router.navigate(['/animales/editar', id]);
+  editarAnimal(animalId: number): void {
+    this.router.navigate(['/animales/editar', animalId]);
   }
 
   crearAnimal(): void {
@@ -119,7 +105,7 @@ export class AnimalesListComponent implements OnInit {
       case 'CRITICO':
         return 'warn';
       default:
-        return '';
+        return 'primary';
     }
   }
 

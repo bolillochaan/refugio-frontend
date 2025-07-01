@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -21,11 +21,21 @@ import { CommonModule } from '@angular/common';
         {{ data.confirmText || 'Confirmar' }}
       </button>
     </mat-dialog-actions>
-  `
+  `,
+  styleUrls: ['./confirm-dialog.css']
 })
-export class ConfirmDialogComponent {
+export class ConfirmDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
+
+  ngOnInit(): void {
+    this.loadAdditionalResources();
+  }
+
+  private loadAdditionalResources(): void {
+    // Aquí puedes cargar recursos adicionales de forma lazy
+    // Por ejemplo, traducciones, configuraciones, etc.
+  }
 }
