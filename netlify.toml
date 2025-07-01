@@ -6,7 +6,6 @@
   NODE_VERSION = "18.18.2"
 
 [[plugins]]
-package = "@netlify/angular-runtime"
-  [plugins.config]
-  skip = true
-
+  package = "@netlify/angular-runtime"
+  [plugins.inputs]
+    skip = true
