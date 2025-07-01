@@ -14,7 +14,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist/refugio-frontend/browser",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
