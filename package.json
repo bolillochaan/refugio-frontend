@@ -1,5 +1,5 @@
 {
-  "name": "refugio-frontend",
+    "name": "refugio-frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
