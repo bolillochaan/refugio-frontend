@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './component/home/home.component';
+import { HomeComponent } from './home/components/home/home.component';
 import { AnimalesListComponent } from './animales/components/animales-list/animales-list.component';
 import { AnimalFormComponent } from './animales/components/animal-form/animal-form.component';
 import { AnimalDetailComponent } from './animales/components/animal-detail/animal-detail.component';

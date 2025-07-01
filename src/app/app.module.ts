@@ -28,7 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 // Standalone components
 import { AppComponent } from './app.component';
-import { HomeComponent } from './component/home/home.component';
+import { HomeComponent } from './home/components/home/home.component';
 import { AnimalesListComponent } from './animales/components/animales-list/animales-list.component';
 import { AnimalDetailComponent } from './animales/components/animal-detail/animal-detail.component';
 import { AnimalFormComponent } from './animales/components/animal-form/animal-form.component';

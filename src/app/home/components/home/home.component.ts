@@ -1,8 +1,8 @@
 // src/app/components/home/home.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AnimalService } from '../../services/animal.service';
-import { Animal } from '../../models/animal.model';
+import { AnimalService } from '../../../services/animal.service';
+import { Animal } from '../../../models/animal.model';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
