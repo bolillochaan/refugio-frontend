@@ -44,7 +44,7 @@
         <mat-card-content>
           <!-- Usando LazyImageComponent para optimizar la carga de imágenes -->
           <app-lazy-image 
-            [src]="animal.imagenUrl || 'assets/placeholder-animal.jpg'"
+            [src]="animal.fotoUrl || 'assets/placeholder-animal.jpg'"
             [alt]="'Imagen de ' + animal.nombre"
             cssClass="animal-image"
             placeholder="assets/placeholder-animal.jpg">
