@@ -230,6 +230,21 @@
   border-color: #95a5a6;
 }
 
+.delete-button {
+  margin-left: auto; /* Empuja el botón a la derecha */
+  margin-right: 16px;
+  border-color: #f44336; /* Rojo Material */
+  color: #f44336;
+}
+
+.delete-button:hover {
+  background-color: rgba(244, 67, 54, 0.04);
+}
+
+.mat-icon {
+  margin-right: 8px;
+}
+
 .submit-button {
   min-width: 180px;
   height: 48px;

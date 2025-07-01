@@ -15,6 +15,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-animal-form',
@@ -52,6 +54,7 @@ export class AnimalFormComponent implements OnInit {
 
 
   constructor(
+    private dialog: MatDialog,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -75,9 +78,7 @@ export class AnimalFormComponent implements OnInit {
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       especie: ['', Validators.required],
       raza: ['', Validators.required],
-      edadAproximada: [1, [Validators.required, Validators.min(0), Validators.max(30)]],
-      peso: [1, [Validators.required, Validators.min(0.1), Validators.max(200)]],
-      color: ['', Validators.required],
+      
       estadoSalud: ['SALUDABLE', Validators.required],
       descripcion: [''],
       historialMedico: [''],
@@ -117,43 +118,45 @@ cargarAnimal(): void {
   });
 }
 
-  onSubmit(): void {
-    if (this.animalForm.invalid) {
-      this.marcarCamposComoTocados();
-      this.mostrarError('Por favor, completa todos los campos requeridos');
-      return;
-    }
-
-    this.loading = true;
-    const animalData: Animal = this.animalForm.value;
-
-    const operacion = this.isEditMode 
-      ? this.animalService.actualizarAnimal(this.animalId!, animalData)
-      : this.animalService.crearAnimal(animalData);
-
-    operacion.subscribe({
-      next: (response) => {
-          console.log('Datos a enviar:', animalData); // <-- Agrega esto para depuración
-        const mensaje = this.isEditMode 
-          ? 'Animal actualizado exitosamente'
-          : 'Animal registrado exitosamente';
-        
-        this.mostrarExito(mensaje);
-        this.loading = false;
-        this.router.navigate(['/animales']);
-      },
-      error: (error) => {
-        console.error('Error al guardar animal:', error);
-          console.log('Datos a enviar:', animalData); // <-- Agrega esto para depuración
-        const mensaje = this.isEditMode 
-          ? 'Error al actualizar el animal'
-          : 'Error al registrar el animal';
-        
-        this.mostrarError(mensaje);
-        this.loading = false;
-      }
-    });
+onSubmit(): void {
+  if (this.animalForm.invalid) {
+    this.marcarCamposComoTocados();
+    this.mostrarError('Por favor, completa todos los campos requeridos');
+    return;
   }
+
+  this.loading = true;
+  const animalData: Animal = this.animalForm.value;
+
+  const operacion = this.isEditMode 
+    ? this.animalService.actualizarAnimal(this.animalId!, animalData)
+    : this.animalService.crearAnimal(animalData);
+
+  operacion.subscribe({
+    next: (response) => {
+      const mensaje = this.isEditMode 
+        ? 'Animal actualizado exitosamente'
+        : 'Animal registrado exitosamente';
+      
+      this.mostrarExito(mensaje);
+      
+      // Enviar correo después de guardar
+      this.enviarCorreoNotificacion(response, this.isEditMode ? 'actualización' : 'registro');
+      
+      this.loading = false;
+      this.router.navigate(['/animales']);
+    },
+    error: (error) => {
+      console.error('Error al guardar animal:', error);
+      const mensaje = this.isEditMode 
+        ? 'Error al actualizar el animal'
+        : 'Error al registrar el animal';
+      
+      this.mostrarError(mensaje);
+      this.loading = false;
+    }
+  });
+}
 
   onCancel(): void {
     if (this.animalForm.dirty) {
@@ -171,6 +174,35 @@ cargarAnimal(): void {
       control?.markAsTouched();
     });
   }
+
+  enviarCorreoNotificacion(animal: Animal, tipoAccion: string): void {
+  const asunto = `Notificación de ${tipoAccion} de animal`;
+  const cuerpo = `Se ha ${tipoAccion} el animal ${animal.nombre} (${animal.especie}).\n\n` +
+                 `Detalles:\n` +
+                 `- Nombre: ${animal.nombre}\n` +
+                 `- Especie: ${animal.especie}\n` +
+                 `- Raza: ${animal.raza}\n` +
+                 `- Estado de salud: ${animal.estadoSalud}\n` +
+                 `- Fecha de ingreso: ${animal.fechaIngreso}\n\n` +
+                 `Por favor revise el sistema para más detalles.`;
+
+  const datosCorreo = {
+    asunto: asunto,
+    cuerpo: cuerpo,
+    destinatarios: ['admin@refugio.com', 'personal@refugio.com'], // Ajusta los destinatarios
+    animalId: animal.id
+  };
+
+  this.animalService.enviarCorreoNotificacion(datosCorreo).subscribe({
+    next: () => {
+      console.log('Correo de notificación enviado exitosamente');
+    },
+    error: (error) => {
+      console.error('Error al enviar correo de notificación:', error);
+      // No mostramos error al usuario para no confundirlo con el éxito de guardar
+    }
+  });
+}
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.animalForm.get(fieldName);
@@ -274,4 +306,45 @@ ocultarImagen(event: Event): void {
       error: () => this.mostrarError('No se pudo enviar el correo de adopción')
     });
   }
+
+  
+
+  // Método para confirmar eliminación
+confirmarEliminacion(): void {
+  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    width: '350px',
+    data: {
+      title: 'Confirmar Eliminación',
+      message: '¿Estás seguro de que quieres eliminar este animal? Esta acción no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.eliminarAnimal();
+    }
+  });
+}
+
+// Método para eliminar el animal
+eliminarAnimal(): void {
+  if (!this.animalId) return;
+
+  this.loading = true;
+  this.animalService.eliminarAnimal(this.animalId).subscribe({
+    next: () => {
+      this.mostrarExito('Animal eliminado exitosamente');
+      this.router.navigate(['/animales']);
+    },
+    error: (error) => {
+      console.error('Error al eliminar animal:', error);
+      this.mostrarError('Error al eliminar el animal');
+      this.loading = false;
+    }
+  });
+}
+
+
 }

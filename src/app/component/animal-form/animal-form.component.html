@@ -50,45 +50,14 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Color</mat-label>
-            <input matInput 
-                   formControlName="color" 
-                   placeholder="Ej: Marrón, Negro, Blanco">
-            <mat-icon matSuffix>palette</mat-icon>
-            <mat-error *ngIf="isFieldInvalid('color')">
-              {{ getFieldError('color') }}
-            </mat-error>
-          </mat-form-field>
+          
         </div>
 
         <div class="form-row">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Edad Aproximada (años)</mat-label>
-            <input matInput 
-                   type="number" 
-                   formControlName="edadAproximada" 
-                   min="0" 
-                   max="30">
-            <mat-icon matSuffix>schedule</mat-icon>
-            <mat-error *ngIf="isFieldInvalid('edadAproximada')">
-              {{ getFieldError('edadAproximada') }}
-            </mat-error>
-          </mat-form-field>
+          
+         
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Peso (kg)</mat-label>
-            <input matInput 
-                   type="number" 
-                   formControlName="peso" 
-                   min="0.1" 
-                   max="200" 
-                   step="0.1">
-            <mat-icon matSuffix>monitor_weight</mat-icon>
-            <mat-error *ngIf="isFieldInvalid('peso')">
-              {{ getFieldError('peso') }}
-            </mat-error>
-          </mat-form-field>
+          
 
          
         </div>
@@ -193,6 +162,7 @@
           Cancelar
         </button>
         
+        
         <button type="submit" 
                 mat-raised-button 
                 color="primary"
@@ -200,6 +170,16 @@
                 class="submit-button">
           <mat-icon>{{ isEditMode ? 'edit' : 'save' }}</mat-icon>
           {{ isEditMode ? 'Actualizar Animal' : 'Registrar Animal' }}
+        </button>
+
+         <button type="button" 
+          mat-stroked-button 
+          color="warn"
+          *ngIf="isEditMode"
+          (click)="confirmarEliminacion()"
+          class="delete-button">
+    <mat-icon>delete</mat-icon>
+    Eliminar
         </button>
       </div>
     </form>

@@ -69,7 +69,7 @@
     
     <div class="animals-grid" *ngIf="animalesRecientes.length > 0">
       <mat-card class="animal-card" *ngFor="let animal of animalesRecientes">
-        <img mat-card-image [src]="animal.fotoUrl || '/assets/placeholder-animal.jpg'" [alt]="animal.nombre">
+      
         <mat-card-header>
           <mat-card-title>{{ animal.nombre }}</mat-card-title>
           <mat-card-subtitle>{{ animal.especie }} • {{ animal.raza }}</mat-card-subtitle>

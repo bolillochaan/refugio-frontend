@@ -37,7 +37,7 @@
   <div *ngIf="!loading" class="animals-grid" fxLayout="row wrap" fxLayoutGap="24px grid">
     <div fxFlex="33" fxFlex.sm="50" fxFlex.xs="100" *ngFor="let animal of animales">
       <mat-card class="animal-card">
-       <img mat-card-image [src]="getFotoUrl(animal)" [alt]="animal.nombre">
+     
 
         <mat-card-header>
           <mat-card-title>{{ animal.nombre }}</mat-card-title>
@@ -45,7 +45,7 @@
         </mat-card-header>
 
         <mat-card-content>
-          <p><strong>Edad:</strong> {{ animal.edadAproximada }} años</p>
+         
 
           <div class="chips">
             <mat-chip [color]="getEstadoColor(animal.estadoSalud)" selected>

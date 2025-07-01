@@ -39,6 +39,10 @@ export class AnimalService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  enviarCorreoNotificacion(datosCorreo: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/enviar-correo-notificacion`, datosCorreo);
+}
+
   buscarPorEspecie(especie: string, page = 0, size = 10): Observable<AnimalResponse> {
     const params = new HttpParams()
       .set('page', page.toString())
